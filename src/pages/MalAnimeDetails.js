@@ -52,7 +52,7 @@ function MalAnimeDetails() {
     let consumeRes = await axios
       .get(`https://zoro-engine.vercel.app/meta/mal/info/${id}`)
       .catch((err) => {
-        setNotAvailable(true);
+        console.log(err);
       });
     console.log(consumeRes.data.episodes);
     setConsumeResponse(consumeRes.data.episodes);
