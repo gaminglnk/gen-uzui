@@ -5,11 +5,10 @@ import styled from "styled-components";
 import AnimeDetailsSkeleton from "../components/skeletons/AnimeDetailsSkeleton";
 import useWindowDimensions from "../hooks/useWindowDimensions";
 import { searchByIdQuery } from "../hooks/searchQueryStrings";
-import { META } from "@consumet/extensions";
+// import { META } from "@consumet/extensions";
 
 function MalAnimeDetails() {
-  const paramsAt = useParams();
-  var id = paramsAt.id;
+  let {id} = useParams();
 
   const [loading, setLoading] = useState(true);
   const { width } = useWindowDimensions();
