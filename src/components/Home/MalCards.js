@@ -4,12 +4,12 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Scrollbar } from "swiper";
-import AnimeCardsSkeleton from "../../components/skeletons/AnimeCardsSkeleton";
+import AnimeCardsSkeleton from "../skeletons/AnimeCardsSkeleton";
 
 import "swiper/css";
 import "swiper/css/scrollbar";
 
-function AnimeCards(props) {
+function MalCards(props) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -18,10 +18,10 @@ function AnimeCards(props) {
 
   async function getData() {
     let res = await axios.get(
-      `${process.env.REACT_APP_BACKEND_URL}api/getmalinfo?criteria=${props.criteria}&count=${props.count}`
+      `https://api.jikan.moe/v4/${props.criteria}?limit=${props.count}`
     );
     console.log(
-      `${process.env.REACT_APP_BACKEND_URL}api/getmalinfo?criteria=${props.criteria}&count=${props.count}`
+      `https://api.jikan.moe/v4/${props.criteria}?limit=${props.count}`
     );
 
     setLoading(false);
@@ -65,10 +65,10 @@ function AnimeCards(props) {
           {data.map((item, i) => (
             <SwiperSlide>
               <Wrapper>
-                <Link to={"id/" + item.node.id}>
-                  <img src={item.node.main_picture.large} alt="" />
+                <Link to={"id/" + item.mal_id}>
+                  <img src={item.images.webp.image_url} alt="" />
                 </Link>
-                <p>{item.node.title}</p>
+                <p>{item.title_english}</p>
               </Wrapper>
             </SwiperSlide>
           ))}
@@ -102,4 +102,4 @@ const Wrapper = styled.div`
   }
 `;
 
-export default AnimeCards;
+export default MalCards;

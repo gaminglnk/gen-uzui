@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Carousel from "../components/Home/Carousel";
 import axios from "axios";
-import AnimeCards from "../components/Home/AnimeCards";
+import MalCards from "../components/Home/MalCards";
+import AnilistCards from "../components/Home/AnilistCards";
 import HomeSkeleton from "../components/skeletons/CarouselSkeleton";
 import useWindowDimensions from "../hooks/useWindowDimensions";
 import WatchingEpisodes from "../components/Home/WatchingEpisodes";
@@ -71,38 +72,33 @@ function Home() {
         <div>
           <HeadingWrapper>
             <Heading>
-              <span>Trending</span> Now
+              <span>Releasing</span> Now
             </Heading>
             <Links to="/trending/1">View All</Links>
           </HeadingWrapper>
-          <AnimeCards count={width <= 600 ? 7 : 15} criteria="airing" />
+          <MalCards count={width <= 600 ? 7 : 15} criteria="seasons/now" />
         </div>
         <div>
           <HeadingWrapper>
             <Heading>
-              <span>All Time</span> Popular
+              <span>Mal's</span> Popular
             </Heading>
             <Links to="/popular/1">View All</Links>
           </HeadingWrapper>
-          <AnimeCards count={width <= 600 ? 7 : 15} criteria="bypopularity" />
+          <MalCards count={width <= 600 ? 7 : 15} criteria="top/anime" />
         </div>
         <div>
           <HeadingWrapper>
             <Heading>
-              <span>Top 100</span> Anime
-            </Heading>
-            <Links to="/top100/1">View All</Links>
-          </HeadingWrapper>
-          <AnimeCards count={width <= 600 ? 7 : 15} criteria="all" />
-        </div>
-        <div>
-          <HeadingWrapper>
-            <Heading>
-              <span>All Time</span> Favourite
+              <span>Anilist's</span> Popular
             </Heading>
             <Links to="/favourites/1">View All</Links>
           </HeadingWrapper>
-          <AnimeCards count={width <= 600 ? 7 : 15} criteria="favorite" />
+          <AnilistCards
+            count={width <= 600 ? 7 : 15}
+            criteria="TRENDING_DESC"
+            type="ANIME"
+          />
         </div>
         <div>
           <HeadingWrapper>
@@ -111,7 +107,10 @@ function Home() {
             </Heading>
             <Links to="/movies">View All</Links>
           </HeadingWrapper>
-          <AnimeCards count={width <= 600 ? 7 : 15} criteria="movie" />
+          <MalCards
+            count={`${width <= 600 ? 7 : 15}&type=movie`}
+            criteria="top/anime"
+          />
         </div>
       </HomeDiv>
     </div>
