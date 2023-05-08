@@ -15,7 +15,7 @@ function PopularMovies() {
   async function getAnime() {
     window.scrollTo(0, 0);
     let res = await axios.get(
-      `${process.env.REACT_APP_BACKEND_URL}api/getmalinfo?criteria=movie&count=100`
+      `https://api.jikan.moe/v4/top/anime?limit=100&type=movie`
     );
 
     setLoading(false);
@@ -34,9 +34,9 @@ function PopularMovies() {
           </Heading>
           <CardWrapper>
             {animeDetails.map((item, i) => (
-              <Links to={"/id/" + item.node.id}>
-                <img src={item.node.main_picture.large} alt="" />
-                <p>{item.node.title}</p>
+              <Links to={"/id/" + item.mal_id}>
+                <img src={item.images.webp.image_url} alt="" />
+                <p>{item.title_english}</p>
               </Links>
             ))}
           </CardWrapper>

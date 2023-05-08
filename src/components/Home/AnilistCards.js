@@ -111,7 +111,11 @@ function AnilistCards(props) {
                 <Link to={"id/" + item.idMal}>
                   <img src={item.coverImage.large} alt="" />
                 </Link>
-                <p>{item.title.english}</p>
+                <p>
+                  {item.title.english !== null
+                    ? item.title.english
+                    : item.title.userPreferred}
+                </p>
               </Wrapper>
             </SwiperSlide>
           ))}

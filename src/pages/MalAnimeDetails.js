@@ -13,6 +13,7 @@ function MalAnimeDetails() {
   const { width } = useWindowDimensions();
   const [anilistResponse, setAnilistResponse] = useState();
   const [malResponse, setMalResponse] = useState();
+  const [consumeResponse, setConsumeResponse] = useState();
   const [expanded, setExpanded] = useState(false);
   const [dub, setDub] = useState(false);
   const [notAvailable, setNotAvailable] = useState(false);
@@ -47,12 +48,22 @@ function MalAnimeDetails() {
       console.log(err);
     });
     setAnilistResponse(aniRes.data.data.Media);
+
     let malRes = await axios
       .get(`${process.env.REACT_APP_BACKEND_URL}api/getidinfo?malId=${id}`)
       .catch((err) => {
         setNotAvailable(true);
       });
+    console.log(malRes.data);
     setMalResponse(malRes.data);
+
+    let consRes = await axios
+      .get(`https://api.consumet.org/meta/mal/info/${id}`)
+      .catch((err) => {
+        setNotAvailable(true);
+      });
+    console.log(consRes.data);
+    setConsumeResponse(consRes.data);
     setLoading(false);
   }
 
@@ -113,7 +124,6 @@ function MalAnimeDetails() {
                       </button>
                     </section>
                   )}
-
                   {width <= 600 && !expanded && (
                     <p>
                       <span>Plot Summery: </span>
@@ -132,7 +142,6 @@ function MalAnimeDetails() {
                       }}
                     ></p>
                   )}
-
                   <p>
                     <span>Genre: </span>
                     {anilistResponse.genres.toString()}
@@ -142,19 +151,17 @@ function MalAnimeDetails() {
                     {anilistResponse.startDate.year}
                   </p>
                   <p>
+                    <span>Avg Score: </span>
+                    {anilistResponse.averageScore / 10}
+                  </p>
+                  <p>
                     <span>Status: </span>
                     {anilistResponse.status}
                   </p>
                   <p>
-                    <span>Number of Sub Episodes: </span>
-                    {malResponse.subTotalEpisodes}
+                    <span>Number of Dub Episodes: </span>
+                    {anilistResponse.studios}
                   </p>
-                  {malResponse.isDub && (
-                    <p>
-                      <span>Number of Dub Episodes: </span>
-                      {malResponse.dubTotalEpisodes}
-                    </p>
-                  )}
                 </div>
               </ContentWrapper>
               <Episode>
@@ -176,46 +183,24 @@ function MalAnimeDetails() {
                 </DubContainer>
                 {width > 600 && (
                   <Episodes>
-                    {malResponse.isDub &&
-                      dub &&
-                      [...Array(malResponse.dubTotalEpisodes)].map((x, i) => (
-                        <EpisodeLink
-                          to={`/play/${malResponse.dubLink}/${parseInt(i) + 1}`}
-                        >
-                          Episode {i + 1}
-                        </EpisodeLink>
-                      ))}
-
-                    {!dub &&
-                      [...Array(malResponse.subTotalEpisodes)].map((x, i) => (
-                        <EpisodeLink
-                          to={`/play/${malResponse.subLink}/${parseInt(i) + 1}`}
-                        >
-                          Episode {i + 1}
-                        </EpisodeLink>
-                      ))}
+                    {[...Array(malResponse.subTotalEpisodes)].map((x, i) => (
+                      <EpisodeLink
+                        to={`/play/${malResponse.subLink}/${parseInt(i) + 1}`}
+                      >
+                        Episode {i + 1}
+                      </EpisodeLink>
+                    ))}
                   </Episodes>
                 )}
                 {width <= 600 && (
                   <Episodes>
-                    {malResponse.isDub &&
-                      dub &&
-                      [...Array(malResponse.dubTotalEpisodes)].map((x, i) => (
-                        <EpisodeLink
-                          to={`/play/${malResponse.dubLink}/${parseInt(i) + 1}`}
-                        >
-                          {i + 1}
-                        </EpisodeLink>
-                      ))}
-
-                    {!dub &&
-                      [...Array(malResponse.subTotalEpisodes)].map((x, i) => (
-                        <EpisodeLink
-                          to={`/play/${malResponse.subLink}/${parseInt(i) + 1}`}
-                        >
-                          {i + 1}
-                        </EpisodeLink>
-                      ))}
+                    {[...Array(malResponse.subTotalEpisodes)].map((x, i) => (
+                      <EpisodeLink
+                        to={`/play/${malResponse.subLink}/${parseInt(i) + 1}`}
+                      >
+                        {i + 1}
+                      </EpisodeLink>
+                    ))}
                   </Episodes>
                 )}
               </Episode>

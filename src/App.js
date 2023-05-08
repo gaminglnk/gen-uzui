@@ -14,6 +14,13 @@ import WatchAnime from "./pages/WatchAnime";
 import WatchAnimeV2 from "./pages/WatchAnimeV2";
 import GlobalStyle from "./styles/globalStyles";
 
+/*Comments
+Mal Data is used in '/movies' and '/' only.
+
+        <Route path="/category/:slug" element={<AnimeDetails />} />
+        <Route path="/watch/:episode" element={<WatchAnime />} />
+*/
+
 function App() {
   return (
     <Router>
@@ -27,8 +34,6 @@ function App() {
         <Route path="/top100/:page" element={<Top100Anime />} />
         <Route path="/movies" element={<PopularMovies />} />
         <Route path="/search/:name" element={<SearchResults />} />
-        <Route path="/category/:slug" element={<AnimeDetails />} />
-        <Route path="/watch/:episode" element={<WatchAnime />} />
         <Route path="/id/:id" element={<MalAnimeDetails />} />
         <Route path="/play/:slug/:episode" element={<WatchAnimeV2 />} />
       </Routes>
