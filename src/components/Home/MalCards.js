@@ -68,7 +68,11 @@ function MalCards(props) {
                 <Link to={"id/" + item.mal_id}>
                   <img src={item.images.webp.image_url} alt="" />
                 </Link>
-                <p>{item.title_english}</p>
+                <p>
+                  {item.title_english !== null
+                    ? item.title_english
+                    : item.title}
+                </p>
               </Wrapper>
             </SwiperSlide>
           ))}
