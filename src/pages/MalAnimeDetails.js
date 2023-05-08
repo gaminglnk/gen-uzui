@@ -49,19 +49,20 @@ function MalAnimeDetails() {
     });
     setAnilistResponse(aniRes.data.data.Media);
 
-    /*let consRes = await axios
-      .get(`https://api.consumet.org/meta/mal/info/${id}`)
+    let consumeRes = await axios
+      .get(`https://zoro-engine.vercel.app/meta/mal/info/${id}`)
       .catch((err) => {
         setNotAvailable(true);
       });
-    console.log(consRes.data);
-    setConsumeResponse(consRes.data);*/
+    console.log(consumeRes.data.episodes);
+    setConsumeResponse(consumeRes.data.episodes);
 
-    let consumeRes = new META.Myanimelist();
-    await consumeRes.fetchAnimeInfo(id).then((data) => {
-      console.log(data.episodes);
-      setConsumeResponse(data.episodes);
-    });
+    /*let fetchEP = new META.Anilist();
+    await fetchEP
+      .fetchEpisodeSources("one-punch-man-dub-episode-12")
+      .then((data) => {
+        console.log(data);
+      });*/
     setLoading(false);
   }
 
@@ -89,7 +90,7 @@ function MalAnimeDetails() {
               <ContentWrapper>
                 <Poster>
                   <img src={anilistResponse.coverImage.extraLarge} alt="" />
-                  <Button to={`/watch/${consumeResponse[0].id}`}>
+                  <Button key="wxjd" to={`/watch/${consumeResponse[0].id}`}>
                     Binge Now
                   </Button>
                 </Poster>
@@ -161,7 +162,7 @@ function MalAnimeDetails() {
                 {width > 600 && (
                   <Episodes>
                     {consumeResponse.map((episode, i) => (
-                      <EpisodeLink to={`/watch/${episode.id}`}>
+                      <EpisodeLink key={episode.id} to={`/watch/${episode.id}`}>
                         Episode {i + 1}
                       </EpisodeLink>
                     ))}
@@ -170,7 +171,7 @@ function MalAnimeDetails() {
                 {width <= 600 && (
                   <Episodes>
                     {consumeResponse.map((episode, i) => (
-                      <EpisodeLink to={`/watch/${episode.id}`}>
+                      <EpisodeLink key={episode.id} to={`/watch/${episode.id}`}>
                         {i + 1}
                       </EpisodeLink>
                     ))}

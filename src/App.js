@@ -11,6 +11,7 @@ import SearchResults from "./pages/SearchResults";
 import Top100Anime from "./pages/Top100Anime";
 import TrendingAnime from "./pages/TrendingAnime";
 import WatchAnime from "./pages/WatchAnime";
+import WatchPage from "./pages/WatchPage";
 import WatchAnimeV2 from "./pages/WatchAnimeV2";
 import GlobalStyle from "./styles/globalStyles";
 
@@ -18,6 +19,7 @@ import GlobalStyle from "./styles/globalStyles";
 Mal Data is used in '/movies' and '/' only.
 
         <Route path="/category/:slug" element={<AnimeDetails />} />
+        <Route path="/play/:slug/:episode" element={<WatchAnimeV2 />} />
         <Route path="/watch/:episode" element={<WatchAnime />} />
 */
 
@@ -35,7 +37,7 @@ function App() {
         <Route path="/movies" element={<PopularMovies />} />
         <Route path="/search/:name" element={<SearchResults />} />
         <Route path="/id/:id" element={<MalAnimeDetails />} />
-        <Route path="/play/:slug/:episode" element={<WatchAnimeV2 />} />
+        <Route path="/watch/:episode" element={<WatchPage />} />
       </Routes>
       <Toaster
         toastOptions={{
