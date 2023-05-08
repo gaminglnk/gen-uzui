@@ -8,7 +8,8 @@ import { searchByIdQuery } from "../hooks/searchQueryStrings";
 import { META } from "@consumet/extensions";
 
 function MalAnimeDetails() {
-  let id = useParams().id;
+  const paramsAt = useParams();
+  var id = paramsAt.id;
 
   const [loading, setLoading] = useState(true);
   const { width } = useWindowDimensions();
