@@ -5,6 +5,7 @@ import styled from "styled-components";
 import AnimeDetailsSkeleton from "../components/skeletons/AnimeDetailsSkeleton";
 import useWindowDimensions from "../hooks/useWindowDimensions";
 import { searchByIdQuery } from "../hooks/searchQueryStrings";
+import { META } from "@consumet/extensions";
 
 function MalAnimeDetails() {
   let id = useParams().id;
@@ -12,7 +13,6 @@ function MalAnimeDetails() {
   const [loading, setLoading] = useState(true);
   const { width } = useWindowDimensions();
   const [anilistResponse, setAnilistResponse] = useState();
-  const [malResponse, setMalResponse] = useState();
   const [consumeResponse, setConsumeResponse] = useState();
   const [expanded, setExpanded] = useState(false);
   const [dub, setDub] = useState(false);
@@ -49,21 +49,19 @@ function MalAnimeDetails() {
     });
     setAnilistResponse(aniRes.data.data.Media);
 
-    let malRes = await axios
-      .get(`${process.env.REACT_APP_BACKEND_URL}api/getidinfo?malId=${id}`)
-      .catch((err) => {
-        setNotAvailable(true);
-      });
-    console.log(malRes.data);
-    setMalResponse(malRes.data);
-
-    let consRes = await axios
+    /*let consRes = await axios
       .get(`https://api.consumet.org/meta/mal/info/${id}`)
       .catch((err) => {
         setNotAvailable(true);
       });
     console.log(consRes.data);
-    setConsumeResponse(consRes.data);
+    setConsumeResponse(consRes.data);*/
+
+    let consumeRes = new META.Myanimelist();
+    await consumeRes.fetchAnimeInfo(id).then((data) => {
+      console.log(data.episodes);
+      setConsumeResponse(data.episodes);
+    });
     setLoading(false);
   }
 
@@ -91,17 +89,9 @@ function MalAnimeDetails() {
               <ContentWrapper>
                 <Poster>
                   <img src={anilistResponse.coverImage.extraLarge} alt="" />
-                  <Button to={`/play/${malResponse.subLink}/1`}>
-                    Watch Sub
+                  <Button to={`/watch/${consumeResponse[0].id}`}>
+                    Binge Now
                   </Button>
-                  {malResponse.isDub && (
-                    <Button
-                      className="outline"
-                      to={`/play/${malResponse.dubLink}/1`}
-                    >
-                      Watch Dub
-                    </Button>
-                  )}
                 </Poster>
                 <div>
                   <h1>{anilistResponse.title.userPreferred}</h1>
@@ -155,38 +145,23 @@ function MalAnimeDetails() {
                     {anilistResponse.averageScore / 10}
                   </p>
                   <p>
-                    <span>Status: </span>
-                    {anilistResponse.status}
+                    <span>Episodes: </span>
+                    {anilistResponse.episodes}
                   </p>
                   <p>
-                    <span>Number of Dub Episodes: </span>
-                    {anilistResponse.studios}
+                    <span>Status: </span>
+                    {anilistResponse.status}
                   </p>
                 </div>
               </ContentWrapper>
               <Episode>
                 <DubContainer>
-                  <h2>Episodes</h2>
-                  {malResponse.isDub && (
-                    <div class="switch">
-                      <label for="switch">
-                        <input
-                          type="checkbox"
-                          id="switch"
-                          onChange={(e) => setDub(!dub)}
-                        ></input>
-                        <span class="indicator"></span>
-                        <span class="label">{dub ? "Dub" : "Sub"}</span>
-                      </label>
-                    </div>
-                  )}
+                  <h2>{`Episodes :`}</h2>
                 </DubContainer>
                 {width > 600 && (
                   <Episodes>
-                    {[...Array(malResponse.subTotalEpisodes)].map((x, i) => (
-                      <EpisodeLink
-                        to={`/play/${malResponse.subLink}/${parseInt(i) + 1}`}
-                      >
+                    {consumeResponse.map((episode, i) => (
+                      <EpisodeLink to={`/watch/${episode.id}`}>
                         Episode {i + 1}
                       </EpisodeLink>
                     ))}
@@ -194,10 +169,8 @@ function MalAnimeDetails() {
                 )}
                 {width <= 600 && (
                   <Episodes>
-                    {[...Array(malResponse.subTotalEpisodes)].map((x, i) => (
-                      <EpisodeLink
-                        to={`/play/${malResponse.subLink}/${parseInt(i) + 1}`}
-                      >
+                    {consumeResponse.map((episode, i) => (
+                      <EpisodeLink to={`/watch/${episode.id}`}>
                         {i + 1}
                       </EpisodeLink>
                     ))}

@@ -144,36 +144,37 @@ export let searchAnimeQuery = `
 `;
 
 export let searchByIdQuery = `
-	query($id: Int) {
-		Media(idMal: $id, type: ANIME){
-			title {
-				romaji
-				english
-				native
-				userPreferred
-			}
-			type
-			status
-			genres
-			description
-			startDate {
-				year
-				month
-				day
-			}
-			endDate {
-				year
-				month
-				day
-			}
-			averageScore
-			bannerImage
-			coverImage {
-				extraLarge
-				large
-			}
-		}
-	}
+query ($id: Int) {
+  Media(idMal: $id, type: ANIME) {
+    title {
+      romaji
+      english
+      native
+      userPreferred
+    }
+    type
+    episodes
+    status
+    genres
+    description
+    startDate {
+      year
+      month
+      day
+    }
+    endDate {
+      year
+      month
+      day
+    }
+    averageScore
+    bannerImage
+    coverImage {
+      extraLarge
+      large
+    }
+  }
+}
 `;
 
 export let searchWatchedId = `
