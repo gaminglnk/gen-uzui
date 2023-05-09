@@ -18,33 +18,32 @@ function AnilistCards(props) {
   }, []);
 
   let FetchQuery = `
-	query($perPage: Int, $page: Int) {
-		Page(page: $page, perPage: $perPage) {
-			pageInfo {
-				total
-				perPage
-				currentPage
-				lastPage
-				hasNextPage
-			}
-			media (sort :${props.criteria}, type : ${props.type}){
-				idMal
-				title {
-					romaji
-					english
-					userPreferred
-				}
-				coverImage {
-					medium
-        	large
-        	extraLarge
-				}
-				id
-				episodes
-			}
-		}
-	}
-`;
+query ($perPage: Int, $page: Int) {
+  Page(page: $page, perPage: $perPage) {
+    pageInfo {
+      total
+      perPage
+      currentPage
+      lastPage
+      hasNextPage
+    }
+    media(sort: ${props.criteria}, type: ${props.type}) {
+      idMal
+      id
+      title {
+        romaji
+        english
+        userPreferred
+      }
+      coverImage {
+        medium
+        large
+        extraLarge
+      }
+      episodes
+    }
+  }
+}`;
 
   async function getData() {
     window.scrollTo(0, 0);
@@ -65,7 +64,6 @@ function AnilistCards(props) {
     }).catch((err) => {
       console.log(err);
     });
-    console.log(anilist.data.data.Page.media);
 
     setData(anilist.data.data.Page.media);
     setLoading(false);
@@ -108,13 +106,13 @@ function AnilistCards(props) {
           {data.map((item, i) => (
             <SwiperSlide>
               <Wrapper>
-                <Link to={"id/" + item.idMal}>
+                <Link to={"id/" + item.id}>
                   <img src={item.coverImage.large} alt="" />
                 </Link>
                 <p>
                   {item.title.english !== null
-                    ? item.title.english
-                    : item.title.userPreferred}
+                    ? item.title.english.substring(0, 35) + "... "
+                    : item.title.userPreferred.substring(0, 35) + "... "}
                 </p>
               </Wrapper>
             </SwiperSlide>

@@ -70,8 +70,8 @@ function MalCards(props) {
                 </Link>
                 <p>
                   {item.title_english !== null
-                    ? item.title_english
-                    : item.title}
+                    ? item.title_english.substring(0, 35) + "... "
+                    : item.title.substring(0, 35) + "... "}
                 </p>
               </Wrapper>
             </SwiperSlide>

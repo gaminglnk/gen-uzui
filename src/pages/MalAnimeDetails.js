@@ -5,17 +5,17 @@ import styled from "styled-components";
 import AnimeDetailsSkeleton from "../components/skeletons/AnimeDetailsSkeleton";
 import useWindowDimensions from "../hooks/useWindowDimensions";
 import { searchByIdQuery } from "../hooks/searchQueryStrings";
-// import { META } from "@consumet/extensions";
+import { META } from "@consumet/extensions";
 
 function MalAnimeDetails() {
-  let {id} = useParams();
+  let { id } = useParams();
 
   const [loading, setLoading] = useState(true);
   const { width } = useWindowDimensions();
   const [anilistResponse, setAnilistResponse] = useState();
   const [consumeResponse, setConsumeResponse] = useState();
   const [expanded, setExpanded] = useState(false);
-  const [dub, setDub] = useState(false);
+  const [mal, setMal] = useState();
   const [notAvailable, setNotAvailable] = useState(false);
 
   useEffect(() => {
@@ -47,22 +47,33 @@ function MalAnimeDetails() {
     }).catch((err) => {
       console.log(err);
     });
-    setAnilistResponse(aniRes.data.data.Media);
+    await setAnilistResponse(aniRes.data.data.Media);
+    await setMal(aniRes.data.data.Media.idMal);
+    await console.log(anilistResponse);
 
-    let consumeRes = await axios
+    /* let consumeRes = await axios
       .get(`https://zoro-engine.vercel.app/meta/mal/info/${id}`)
       .catch((err) => {
         console.log(err);
       });
     console.log(consumeRes.data.episodes);
-    setConsumeResponse(consumeRes.data.episodes);
+    setConsumeResponse(consumeRes.data.episodes); */
 
-    /*let fetchEP = new META.Anilist();
+    let fetchEP = new META.Anilist();
     await fetchEP
-      .fetchEpisodeSources("one-punch-man-dub-episode-12")
+      .fetchEpisodesListById(id)
       .then((data) => {
-        console.log(data);
-      });*/
+        if (data.length === 0) {
+          setNotAvailable(true);
+        } else {
+          setConsumeResponse(data);
+        }
+        console.log("Meta  response (for devs) :", data);
+      })
+      .catch((err) => {
+        console.log(err);
+        setNotAvailable(true);
+      });
     setLoading(false);
   }
 
@@ -71,7 +82,7 @@ function MalAnimeDetails() {
       {notAvailable && (
         <NotAvailable>
           <img src="./assets/404.png" alt="404" />
-          <h1>Oops! This Anime Is Not Available</h1>
+          <h1>Oops! Looks like this isn't available.</h1>
         </NotAvailable>
       )}
       {loading && !notAvailable && <AnimeDetailsSkeleton />}
@@ -93,6 +104,14 @@ function MalAnimeDetails() {
                   <Button key="wxjd" to={`/watch/${consumeResponse[0].id}`}>
                     Binge Now
                   </Button>
+                  <MyAnimeList
+                    className="outline"
+                    href={"https://myanimelist.net/anime/" + mal}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    MyAnimeList
+                  </MyAnimeList>
                 </Poster>
                 <div>
                   <h1>{anilistResponse.title.userPreferred}</h1>
@@ -107,7 +126,7 @@ function MalAnimeDetails() {
                     <section>
                       <p
                         dangerouslySetInnerHTML={{
-                          __html: `<span>Plot Summery: </span>${anilistResponse.description}`,
+                          __html: `<span>Plot Summary: </span>${anilistResponse.description}`,
                         }}
                       ></p>
                       <button onClick={() => readMoreHandler()}>
@@ -128,7 +147,7 @@ function MalAnimeDetails() {
                     <p
                       dangerouslySetInnerHTML={{
                         __html:
-                          "<span>Plot Summery: </span>" +
+                          "<span>Plot Summary: </span>" +
                           anilistResponse.description,
                       }}
                     ></p>
@@ -425,6 +444,25 @@ const Poster = styled.div`
 `;
 
 const Button = styled(Link)`
+  font-size: 1.2rem;
+  padding: 1rem 3.4rem;
+  text-align: center;
+  text-decoration: none;
+  color: white;
+  background-color: #7676ff;
+  font-weight: 700;
+  border-radius: 0.4rem;
+  position: relative;
+  top: -25%;
+  white-space: nowrap;
+
+  @media screen and (max-width: 600px) {
+    display: block;
+    width: 100%;
+  }
+`;
+
+const MyAnimeList = styled.a`
   font-size: 1.2rem;
   padding: 1rem 3.4rem;
   text-align: center;

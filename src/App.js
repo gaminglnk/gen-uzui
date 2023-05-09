@@ -34,7 +34,7 @@ function App() {
         <Route path="/trending/:page" element={<TrendingAnime />} />
         <Route path="/favourites/:page" element={<FavouriteAnime />} />
         <Route path="/top100/:page" element={<Top100Anime />} />
-        <Route path="/movies" element={<PopularMovies />} />
+        <Route path="/movies/:page" element={<PopularMovies />} />
         <Route path="/search/:name" element={<SearchResults />} />
         <Route path="/id/:id" element={<MalAnimeDetails />} />
         <Route path="/watch/:episode" element={<WatchPage />} />

@@ -1,50 +1,96 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
 import SearchResultsSkeleton from "../components/skeletons/SearchResultsSkeleton";
+import { PopularMoviesQuery } from "../hooks/searchQueryStrings";
 
 function PopularMovies() {
+  let { page } = useParams();
   const [animeDetails, setAnimeDetails] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getAnime();
-  }, []);
+  }, [page]);
 
   async function getAnime() {
+    setLoading(true);
     window.scrollTo(0, 0);
-    let res = await axios.get(
-      `https://api.jikan.moe/v4/top/anime?limit=100&type=movie`
-    );
-
+    const res = await axios({
+      url: process.env.REACT_APP_BASE_URL,
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      data: {
+        query: PopularMoviesQuery,
+        variables: {
+          page: page,
+          perPage: 50,
+        },
+      },
+    }).catch((err) => {
+      console.log(err);
+    });
     setLoading(false);
-    console.log(res.data.data);
-    setAnimeDetails(res.data.data);
-    document.title = "Popular Anime - Miyou";
+    console.log(res.data.data.Page.media);
+    setAnimeDetails(res.data.data.Page.media);
+    document.title = "Popular Movies - Miyou";
   }
-
   return (
     <div>
-      {loading && <SearchResultsSkeleton name="Popular Movie" />}
+      {loading && <SearchResultsSkeleton name="Popular Movies" />}
       {!loading && (
         <Parent>
           <Heading>
-            <span>Popular Movie</span> Results
+            <span>Popular Movies</span> Results
           </Heading>
           <CardWrapper>
             {animeDetails.map((item, i) => (
-              <Links to={"/id/" + item.mal_id}>
-                <img src={item.images.webp.image_url} alt="" />
-                <p>{item.title_english}</p>
+              <Links to={"/id/" + item.id}>
+                <img src={item.coverImage.large} alt="" />
+                <p>
+                  {item.title.english !== null
+                    ? item.title.english
+                    : item.title.userPreferred}
+                </p>
               </Links>
             ))}
           </CardWrapper>
+          <NavButtons>
+            {page > 1 && (
+              <NavButton to={"/movies/" + (parseInt(page) - 1)}>
+                Previous
+              </NavButton>
+            )}
+            <NavButton to={"/movies/" + (parseInt(page) + 1)}>Next</NavButton>
+          </NavButtons>
         </Parent>
       )}
     </div>
   );
 }
+
+const NavButtons = styled.div`
+  margin-top: 2.5rem;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+`;
+
+const NavButton = styled(Link)`
+  padding: 0.8rem 2rem;
+  text-decoration: none;
+  color: white;
+  background-color: none;
+  border: 2px solid #53507a;
+  border-radius: 0.5rem;
+`;
+
 const Parent = styled.div`
   margin: 2rem 5rem 2rem 5rem;
   @media screen and (max-width: 600px) {
@@ -127,4 +173,5 @@ const Heading = styled.p`
     margin-bottom: 1rem;
   }
 `;
+
 export default PopularMovies;

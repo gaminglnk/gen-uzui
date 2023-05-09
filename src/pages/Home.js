@@ -72,27 +72,9 @@ function Home() {
         <div>
           <HeadingWrapper>
             <Heading>
-              <span>Releasing</span> Now
+              <span>Trending</span> Now
             </Heading>
             <Links to="/trending/1">View All</Links>
-          </HeadingWrapper>
-          <MalCards count={width <= 600 ? 7 : 15} criteria="seasons/now" />
-        </div>
-        <div>
-          <HeadingWrapper>
-            <Heading>
-              <span>Mal's</span> Popular
-            </Heading>
-            <Links to="/popular/1">View All</Links>
-          </HeadingWrapper>
-          <MalCards count={width <= 600 ? 7 : 15} criteria="top/anime" />
-        </div>
-        <div>
-          <HeadingWrapper>
-            <Heading>
-              <span>Anilist's</span> Popular
-            </Heading>
-            <Links to="/favourites/1">View All</Links>
           </HeadingWrapper>
           <AnilistCards
             count={width <= 600 ? 7 : 15}
@@ -103,13 +85,53 @@ function Home() {
         <div>
           <HeadingWrapper>
             <Heading>
+              <span>Popular</span> Anime
+            </Heading>
+            <Links to="/popular/1">View All</Links>
+          </HeadingWrapper>
+          <AnilistCards
+            count={width <= 600 ? 7 : 15}
+            criteria="POPULARITY_DESC"
+            type="ANIME, format: TV"
+          />
+        </div>
+        <div>
+          <HeadingWrapper>
+            <Heading>
               <span>Popular</span> Movies
             </Heading>
-            <Links to="/movies">View All</Links>
+            <Links to="/movies/1">View All</Links>
           </HeadingWrapper>
-          <MalCards
-            count={`${width <= 600 ? 7 : 15}&type=movie`}
-            criteria="top/anime"
+          <AnilistCards
+            count={width <= 600 ? 7 : 15}
+            criteria="POPULARITY_DESC"
+            type="ANIME, format: MOVIE"
+          />
+        </div>
+        <div>
+          <HeadingWrapper>
+            <Heading>
+              <span>Anilist's</span> Favourites
+            </Heading>
+            <Links to="/favourites/1">View All</Links>
+          </HeadingWrapper>
+          <AnilistCards
+            count={width <= 600 ? 7 : 15}
+            criteria="FAVOURITES_DESC"
+            type="ANIME"
+          />
+        </div>
+        <div>
+          <HeadingWrapper>
+            <Heading>
+              <span>Top 100</span> Anime
+            </Heading>
+            <Links to="/top100/1">View All</Links>
+          </HeadingWrapper>
+          <AnilistCards
+            count={width <= 600 ? 7 : 15}
+            criteria="SCORE_DESC"
+            type="ANIME"
           />
         </div>
       </HomeDiv>

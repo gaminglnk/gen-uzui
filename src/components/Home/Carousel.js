@@ -76,7 +76,7 @@ function Carousel({ images }) {
                             },
                           }}
                         >
-                          <Button to={"id/" + item.idMal}>
+                          <Button to={"id/" + item.id}>
                             <BsFillPlayFill />
                           </Button>
                         </IconContext.Provider>
@@ -92,7 +92,7 @@ function Carousel({ images }) {
                             },
                           }}
                         >
-                          <Button to={"id/" + item.idMal}>
+                          <Button to={"id/" + item.id}>
                             <BsFillPlayFill />
                             Watch Now
                           </Button>
