@@ -7,6 +7,15 @@ import { createGlobalStyle } from "styled-components";
 // font-family: 'Gilroy-Regular', sans-serif;
 
 const GlobalStyle = createGlobalStyle`
+
+	@font-face {
+  		font-family: 'Hashira';
+  		font-style: normal;
+  		font-weight: 400;
+  		font-display: swap;
+ 		src: url(https://hashira.vercel.app/_next/static/media/709c954702a06b64-s.p.woff2) format('woff2');
+	}
+
 	* {
 		margin: 0;
 		padding: 0;

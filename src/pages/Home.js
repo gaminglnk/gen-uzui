@@ -143,10 +143,21 @@ const Links = styled(Link)`
   color: white;
   font-size: 1.1rem;
   font-family: "Gilroy-Medium", sans-serif;
+  background: #28263a;
+  padding: 0.4rem 0.5rem 0.4rem 0.5rem;
+  border-radius: 5px;
+  border: 1px solid rgba(48, 52, 54, 0.3);
+  text-decoration: none;
+  transition: 0.2s;
+
   @media screen and (max-width: 600px) {
     color: white;
     font-size: 1rem;
     font-family: "Gilroy-Medium", sans-serif;
+  }
+
+  :hover {
+    transform: scale(0.95);
   }
 `;
 
