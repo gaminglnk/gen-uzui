@@ -287,7 +287,7 @@ function WatchPage() {
                     </div>
                   )}
                   <EpisodeButtons>
-                    {width <= 600 && (
+                    {width <= 600 && parseInt(episodeNumber) - 1 > 0 && (
                       <IconContext.Provider
                         value={{
                           size: "1.8rem",
@@ -305,7 +305,7 @@ function WatchPage() {
                         </EpisodeLinks>
                       </IconContext.Provider>
                     )}
-                    {width > 600 && (
+                    {width > 600 && parseInt(episodeNumber) - 1 > 0 && (
                       <IconContext.Provider
                         value={{
                           size: "1.3rem",
@@ -326,45 +326,47 @@ function WatchPage() {
                         </EpisodeLinks>
                       </IconContext.Provider>
                     )}
-                    {width <= 600 && (
-                      <IconContext.Provider
-                        value={{
-                          size: "1.8rem",
-                          style: {
-                            verticalAlign: "middle",
-                          },
-                        }}
-                      >
-                        <EpisodeLinks
-                          to={`/watch/${id}/${gogoId}-episode-${
-                            parseInt(episodeNumber) + 1
-                          }`}
+                    {width <= 600 &&
+                      parseInt(episodeNumber) + 1 <= animeDetails.episodes && (
+                        <IconContext.Provider
+                          value={{
+                            size: "1.8rem",
+                            style: {
+                              verticalAlign: "middle",
+                            },
+                          }}
                         >
-                          <HiArrowSmRight />
-                        </EpisodeLinks>
-                      </IconContext.Provider>
-                    )}
-                    {width > 600 && (
-                      <IconContext.Provider
-                        value={{
-                          size: "1.3rem",
-                          style: {
-                            verticalAlign: "middle",
-                            marginBottom: "0.2rem",
-                            marginLeft: "0.3rem",
-                          },
-                        }}
-                      >
-                        <EpisodeLinks
-                          to={`/watch/${id}/${gogoId}-episode-${
-                            parseInt(episodeNumber) + 1
-                          }`}
+                          <EpisodeLinks
+                            to={`/watch/${id}/${gogoId}-episode-${
+                              parseInt(episodeNumber) + 1
+                            }`}
+                          >
+                            <HiArrowSmRight />
+                          </EpisodeLinks>
+                        </IconContext.Provider>
+                      )}
+                    {width > 600 &&
+                      parseInt(episodeNumber) + 1 <= animeDetails.episodes && (
+                        <IconContext.Provider
+                          value={{
+                            size: "1.3rem",
+                            style: {
+                              verticalAlign: "middle",
+                              marginBottom: "0.2rem",
+                              marginLeft: "0.3rem",
+                            },
+                          }}
                         >
-                          Next
-                          <HiArrowSmRight />
-                        </EpisodeLinks>
-                      </IconContext.Provider>
-                    )}
+                          <EpisodeLinks
+                            to={`/watch/${id}/${gogoId}-episode-${
+                              parseInt(episodeNumber) + 1
+                            }`}
+                          >
+                            Next
+                            <HiArrowSmRight />
+                          </EpisodeLinks>
+                        </IconContext.Provider>
+                      )}
                   </EpisodeButtons>
                 </div>
                 <EpisodesWrapper>
