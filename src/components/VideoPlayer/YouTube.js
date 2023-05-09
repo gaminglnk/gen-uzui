@@ -19,7 +19,7 @@ function YouTube(props) {
       width="calc(100% - 16px)"
       allowFullScreen
       frameBorder={0}
-      allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+      allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen"
       {...embedHtml}
     ></iframe>
   );
