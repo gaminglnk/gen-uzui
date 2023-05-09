@@ -140,8 +140,8 @@ function WatchingEpisodes() {
                 </Link>
                 <p>
                   {item.title.english !== null
-                    ? item.title.english
-                    : item.title.userPreferred}
+                    ? item.title.english.substring(0, 35) + "... "
+                    : item.title.userPreferred.substring(0, 35) + "... "}
                 </p>
                 <p className="episodeNumber">
                   {"Episode - " + localData[i].enumId}

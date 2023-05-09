@@ -217,6 +217,8 @@ function WatchPage() {
                       banner={animeDetails.bannerImage}
                       totalEpisodes={animeDetails.episodes}
                       currentEpisode={episodeNumber}
+                      id={id}
+                      gogoId={gogoId}
                     />
                   )}
                   {!internalPlayer && (

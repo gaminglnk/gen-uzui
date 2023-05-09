@@ -20,6 +20,8 @@ function VideoPlayer({
   banner,
   totalEpisodes,
   currentEpisode,
+  id,
+  gogoId,
 }) {
   const { width } = useWindowDimensions();
   const navigate = useNavigate();
@@ -110,6 +112,12 @@ function VideoPlayer({
           forced: true,
           onChange: (e) => updateQuality(e),
         };
+        // Add Auto Label
+        defaultOptions.i18n = {
+          qualityLabel: {
+            0: "Auto",
+          },
+        };
         hls.on(Hls.Events.LEVEL_SWITCHED, function (event, data) {
           var span = document.querySelector(
             ".plyr__menu__container [data-plyr='quality'][value='0'] span"
@@ -188,7 +196,9 @@ function VideoPlayer({
             localStorage.getItem("autoplay") === "true" &&
             parseInt(currentEpisode) !== parseInt(totalEpisodes)
           ) {
-            navigate(`/play/${slug}/${parseInt(episode) + 1}`);
+            navigate(
+              `/watch/${id}/${gogoId}-episode-${parseInt(currentEpisode) + 1}`
+            );
           }
         });
 
