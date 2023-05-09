@@ -21,7 +21,7 @@ function Nav() {
             ></path>
           </LogoSvg>
           <Logo>
-            himi<span className="dot">tsu°</span>
+            kimi<span className="dot">tsu°</span>
           </Logo>
         </Link>
         <div className="nav-links">
@@ -77,7 +77,7 @@ const LogoSvg = styled.svg`
 `;
 
 const Logo = styled.span`
-  font-family: "Hashira", "Lexend", sans;
+  font-family: "Lexend", sans;
   display: inline-block;
   font-size: 1.55rem;
   line-height: 1.75rem;
