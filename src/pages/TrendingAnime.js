@@ -36,7 +36,7 @@ function TrendingAnime() {
     });
     setLoading(false);
     setAnimeDetails(res.data.data.Page.media);
-    document.title = "Trending Anime - Miyou";
+    document.title = "Trending Anime - Himitsu";
   }
   return (
     <div>

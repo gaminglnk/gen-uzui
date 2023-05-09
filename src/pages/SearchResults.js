@@ -35,7 +35,7 @@ function SearchResults() {
     });
     setLoading(false);
     setResults(res.data.data.Page.media);
-    document.title = urlParams + " - Miyou";
+    document.title = urlParams + " - Himitsu";
   }
   return (
     <div>

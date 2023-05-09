@@ -53,7 +53,7 @@ function WatchAnime() {
       .replace("Episode", "EP")} - ${res.data[0].titleName.substring(
       0,
       res.data[0].titleName.indexOf("Episode")
-    )} - Miyou`;
+    )} - Himitsu`;
   }
 
   function getLocalStorage(animeDetails) {

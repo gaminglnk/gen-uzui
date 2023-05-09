@@ -67,7 +67,7 @@ function WatchAnimeV2() {
     setAnimeDetails(aniRes.data.data.Media);
     document.title = `${aniRes.data.data.Media.title.userPreferred} ${
       res.data.isDub ? "(Dub)" : "(Sub)"
-    } EP-${episode} - Miyou`;
+    } EP-${episode} - Himitsu`;
     setLoading(false);
   }
 

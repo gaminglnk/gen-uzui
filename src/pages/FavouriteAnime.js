@@ -36,7 +36,7 @@ function FavouriteAnime() {
     });
     setLoading(false);
     setAnimeDetails(res.data.data.Page.media);
-    document.title = "Favorite Anime - Miyou";
+    document.title = "Favorite Anime - Himitsu";
   }
   return (
     <div>

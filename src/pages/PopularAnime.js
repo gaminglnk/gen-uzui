@@ -37,7 +37,7 @@ function PopularAnime() {
     setLoading(false);
     console.log(res.data.data.Page.media);
     setAnimeDetails(res.data.data.Page.media);
-    document.title = "Popular Anime - Miyou";
+    document.title = "Popular Anime - Himitsu";
   }
   return (
     <div>
