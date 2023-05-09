@@ -52,7 +52,7 @@ function WatchPage() {
 
     /**/
     var defaultQualitySource =
-      "https://miyou-proxy.onrender.com/" + defaultQualityObj.url;
+      "https://cors.zimjs.com/" + defaultQualityObj.url;
     setEpisodeSource(defaultQualitySource);
     const episodeNumber = episode.match(/episode-(\d+)/i)[1];
     setEpisodeNumber(episodeNumber);
@@ -389,10 +389,6 @@ function WatchPage() {
   );
 }
 
-const pText = styled.p`
-  text-decoration: none;
-`;
-
 const VideoPlayerWrapper = styled.div`
   display: grid;
   grid-template-columns: 70% calc(30% - 1rem);
@@ -507,7 +503,7 @@ const EpisodesWrapper = styled.div`
 
   p {
     font-size: 1.3rem;
-    text-decoration: underline;
+    text-decoration: none;
     color: white;
     font-weight: 400;
     margin-bottom: 1rem;
@@ -548,7 +544,7 @@ const ServerWrapper = styled.div`
     color: white;
     font-size: 1.4rem;
     font-weight: 400;
-    text-decoration: underline;
+    text-decoration: none;
   }
 
   .server-wrapper {
