@@ -203,6 +203,11 @@ query ($id: Int) {
     }
     averageScore
     bannerImage
+    trailer {
+      id
+      site
+      thumbnail
+    }
     coverImage {
       extraLarge
       large

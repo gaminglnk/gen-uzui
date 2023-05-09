@@ -6,6 +6,7 @@ import AnimeDetailsSkeleton from "../components/skeletons/AnimeDetailsSkeleton";
 import useWindowDimensions from "../hooks/useWindowDimensions";
 import { searchByIdQuery } from "../hooks/searchQueryStrings";
 import { META } from "@consumet/extensions";
+import YouTube from "../components/VideoPlayer/YouTube";
 
 function MalAnimeDetails() {
   let { id } = useParams();
@@ -175,6 +176,12 @@ function MalAnimeDetails() {
                 </div>
               </ContentWrapper>
               <Episode>
+                {width <= 600 && (
+                  <Trail>
+                    <YouTube video={anilistResponse.trailer.id} />
+                  </Trail>
+                )}
+                <br></br>
                 <DubContainer>
                   <h2>{`Episodes :`}</h2>
                 </DubContainer>
@@ -204,6 +211,15 @@ function MalAnimeDetails() {
     </div>
   );
 }
+
+const Trail = styled.div`
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  padding-top: 56.25%;
+  border: 2px solid #272639;
+  border-radius: 0.4rem;
+`;
 
 const NotAvailable = styled.div`
   display: flex;

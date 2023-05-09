@@ -88,6 +88,17 @@ const GlobalStyle = createGlobalStyle`
 	.plyr {
     aspect-ratio: 16 / 9;
 	}
+	
+	.yt-trailer {
+		text-align: center;
+ 		position: absolute;
+  		top: 0;
+ 		left: 0;
+ 		bottom: 0;
+ 		right: 0;
+ 		min-width: 100%;
+ 		height: 100%;
+	}
 `;
 
 export default GlobalStyle;
