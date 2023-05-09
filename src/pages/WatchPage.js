@@ -14,14 +14,18 @@ import useWindowDimensions from "../hooks/useWindowDimensions";
 import VideoPlayer from "../components/VideoPlayer/VideoPlayer";
 import { searchByIdQuery } from "../hooks/searchQueryStrings";
 import toast from "react-hot-toast";
+import { META } from "@consumet/extensions";
 
 function WatchPage() {
-  const slug = useParams().slug;
-  const episode = useParams().episode;
+  const { episode, id } = useParams();
 
   const [episodeLinks, setEpisodeLinks] = useState([]);
   const [currentServer, setCurrentServer] = useState("");
   const [animeDetails, setAnimeDetails] = useState();
+  const [gogoId, setGogoId] = useState();
+  const [episodeNumber, setEpisodeNumber] = useState();
+  const [episodeSource, setEpisodeSource] = useState();
+  const [consumeResponse, setConsumeResponse] = useState();
   const [loading, setLoading] = useState(true);
   const { width } = useWindowDimensions();
   const [fullScreen, setFullScreen] = useState(false);
@@ -34,20 +38,33 @@ function WatchPage() {
   async function getEpisodeLinks() {
     setLoading(true);
     window.scrollTo(0, 0);
+
     let res = await axios.get(
-      `${process.env.REACT_APP_BACKEND_URL}api/getmixlinks?id=${slug}&ep=${episode}`
+      `https://zoro-engine.vercel.app/meta/anilist/watch/${episode}`
     );
     setEpisodeLinks(res.data);
-    setCurrentServer(res.data.gogoLink);
-    if (!res.data.sources) {
+    setCurrentServer(res.data.headers.Referer);
+    var sourcesArray = res.data.sources;
+    var defaultQualityObj = sourcesArray.find(
+      (source) => source.quality === "default"
+    );
+    console.log(defaultQualityObj);
+
+    /**/
+    var defaultQualitySource =
+      "https://miyou-proxy.onrender.com/" + defaultQualityObj.url;
+    setEpisodeSource(defaultQualitySource);
+    const episodeNumber = episode.match(/episode-(\d+)/i)[1];
+    setEpisodeNumber(episodeNumber);
+    const gogoId = episode.match(/^(.*?)(?:-episode-\d+)?$/i)[1];
+    setGogoId(gogoId);
+    updateLocalStorage(episodeNumber, episode, id, gogoId);
+    /**/
+
+    if (!defaultQualityObj) {
       setInternalPlayer(true);
     }
-    updateLocalStorage(
-      res.data.animeId,
-      res.data.episodeNum,
-      res.data.mal_id,
-      res.data.isDub
-    );
+
     let aniRes = await axios({
       url: process.env.REACT_APP_BASE_URL,
       method: "POST",
@@ -58,16 +75,25 @@ function WatchPage() {
       data: {
         query: searchByIdQuery,
         variables: {
-          id: res.data.mal_id,
+          id: id,
         },
       },
     }).catch((err) => {
       console.log(err);
     });
+
     setAnimeDetails(aniRes.data.data.Media);
-    document.title = `${aniRes.data.data.Media.title.userPreferred} ${
-      res.data.isDub ? "(Dub)" : "(Sub)"
-    } EP-${episode} - Miyou`;
+    document.title = `${aniRes.data.data.Media.title.userPreferred} EP-${episodeNumber}`;
+
+    let fetchEP = new META.Anilist();
+    await fetchEP
+      .fetchEpisodesListById(id)
+      .then((data) => {
+        setConsumeResponse(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     setLoading(false);
   }
 
@@ -83,29 +109,27 @@ function WatchPage() {
     }
   }
 
-  function updateLocalStorage(animeId, episode, malId, isDub) {
+  function updateLocalStorage(enumId, episode, malId, gogoId) {
     if (localStorage.getItem("Watching")) {
       let data = localStorage.getItem("Watching");
       data = JSON.parse(data);
-      let index = data.findIndex((i) => i.animeId === animeId);
+      let index = data.findIndex((i) => i.gogoId === gogoId);
       if (index !== -1) {
-        data.splice(index, 1);
+        data.slice(index, 1);
       }
       data.unshift({
-        animeId,
+        enumId,
         episode,
         malId,
-        isDub,
       });
       data = JSON.stringify(data);
       localStorage.setItem("Watching", data);
     } else {
       let data = [];
       data.push({
-        animeId,
+        enumId,
         episode,
         malId,
-        isDub,
       });
       data = JSON.stringify(data);
       localStorage.setItem("Watching", data);
@@ -126,8 +150,8 @@ function WatchPage() {
                       animeDetails.title.english !== null
                         ? animeDetails.title.english
                         : animeDetails.title.userPreferred
-                    } ${episodeLinks.isDub ? "(Dub)" : "(Sub)"}`}</span>
-                    {` Episode - ${episode}`}
+                    } (Sub)`}</span>
+                    {` Episode - ${episodeNumber}`}
                   </p>
                   {width <= 600 && (
                     <IconContext.Provider
@@ -139,7 +163,7 @@ function WatchPage() {
                       }}
                     >
                       <a
-                        href={episodeLinks.downloadLink}
+                        href={episodeLinks.download}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
@@ -159,7 +183,7 @@ function WatchPage() {
                       }}
                     >
                       <a
-                        href={episodeLinks.downloadLink}
+                        href={episodeLinks.download}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
@@ -185,14 +209,14 @@ function WatchPage() {
                 <div>
                   {internalPlayer && (
                     <VideoPlayer
-                      sources={episodeLinks.sources}
-                      type={episodeLinks.type}
+                      sources={episodeSource}
+                      type="hls"
                       internalPlayer={internalPlayer}
                       setInternalPlayer={setInternalPlayer}
-                      title={`${episodeLinks.mal_id}EP${episodeLinks.episodeNum}${episodeLinks.isDub}`}
+                      title={`(${id}) - EP${episodeNumber}`}
                       banner={animeDetails.bannerImage}
-                      totalEpisodes={episodeLinks.totalEpisodes}
-                      currentEpisode={episodeLinks.episodeNum}
+                      totalEpisodes={animeDetails.episodes}
+                      currentEpisode={episodeNumber}
                     />
                   )}
                   {!internalPlayer && (
@@ -271,17 +295,9 @@ function WatchPage() {
                         }}
                       >
                         <EpisodeLinks
-                          to={`/play/${episodeLinks.animeId}/${
-                            parseInt(episode) - 1
+                          to={`/watch/${id}/${gogoId}-episode-${
+                            parseInt(episodeNumber) - 1
                           }`}
-                          style={
-                            parseInt(episode) === 1
-                              ? {
-                                  pointerEvents: "none",
-                                  color: "rgba(255,255,255, 0.2)",
-                                }
-                              : {}
-                          }
                         >
                           <HiArrowSmLeft />
                         </EpisodeLinks>
@@ -299,17 +315,9 @@ function WatchPage() {
                         }}
                       >
                         <EpisodeLinks
-                          to={`/play/${episodeLinks.animeId}/${
-                            parseInt(episode) - 1
+                          to={`/watch/${id}/${gogoId}-episode-${
+                            parseInt(episodeNumber) - 1
                           }`}
-                          style={
-                            parseInt(episode) === 1
-                              ? {
-                                  pointerEvents: "none",
-                                  color: "rgba(255,255,255, 0.2)",
-                                }
-                              : {}
-                          }
                         >
                           <HiArrowSmLeft />
                           Previous
@@ -326,18 +334,9 @@ function WatchPage() {
                         }}
                       >
                         <EpisodeLinks
-                          to={`/play/${episodeLinks.animeId}/${
-                            parseInt(episode) + 1
+                          to={`/watch/${id}/${gogoId}-episode-${
+                            parseInt(episodeNumber) + 1
                           }`}
-                          style={
-                            parseInt(episode) ===
-                            parseInt(episodeLinks.totalEpisodes)
-                              ? {
-                                  pointerEvents: "none",
-                                  color: "rgba(255,255,255, 0.2)",
-                                }
-                              : {}
-                          }
                         >
                           <HiArrowSmRight />
                         </EpisodeLinks>
@@ -355,18 +354,9 @@ function WatchPage() {
                         }}
                       >
                         <EpisodeLinks
-                          to={`/play/${episodeLinks.animeId}/${
-                            parseInt(episode) + 1
+                          to={`/watch/${id}/${gogoId}-episode-${
+                            parseInt(episodeNumber) + 1
                           }`}
-                          style={
-                            parseInt(episode) ===
-                            parseInt(episodeLinks.totalEpisodes)
-                              ? {
-                                  pointerEvents: "none",
-                                  color: "rgba(255,255,255, 0.2)",
-                                }
-                              : {}
-                          }
                         >
                           Next
                           <HiArrowSmRight />
@@ -378,22 +368,14 @@ function WatchPage() {
                 <EpisodesWrapper>
                   <p>Episodes</p>
                   <Episodes>
-                    {[...Array(parseInt(episodeLinks.totalEpisodes))].map(
-                      (x, i) => (
-                        <EpisodeLink
-                          to={`/play/${episodeLinks.animeId}/${
-                            parseInt(i) + 1
-                          }`}
-                          style={
-                            i + 1 <= parseInt(episode)
-                              ? { backgroundColor: "#7676ff" }
-                              : {}
-                          }
-                        >
-                          {i + 1}
-                        </EpisodeLink>
-                      )
-                    )}
+                    {consumeResponse.map((episode, i) => (
+                      <EpisodeLink
+                        key={episode.id}
+                        to={`/watch/${id}/${episode.id}`}
+                      >
+                        {i + 1}
+                      </EpisodeLink>
+                    ))}
                   </Episodes>
                 </EpisodesWrapper>
               </VideoPlayerWrapper>
@@ -404,6 +386,10 @@ function WatchPage() {
     </div>
   );
 }
+
+const pText = styled.p`
+  text-decoration: none;
+`;
 
 const VideoPlayerWrapper = styled.div`
   display: grid;

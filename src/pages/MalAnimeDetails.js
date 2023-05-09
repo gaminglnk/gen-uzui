@@ -102,7 +102,10 @@ function MalAnimeDetails() {
               <ContentWrapper>
                 <Poster>
                   <img src={anilistResponse.coverImage.extraLarge} alt="" />
-                  <Button key="wxjd" to={`/watch/${consumeResponse[0].id}`}>
+                  <Button
+                    key="wxjd"
+                    to={`/watch/${id}/${consumeResponse[0].id}`}
+                  >
                     Binge Now
                   </Button>
                   <MyAnimeList
@@ -137,7 +140,7 @@ function MalAnimeDetails() {
                   )}
                   {width <= 600 && !expanded && (
                     <p>
-                      <span>Plot Summery: </span>
+                      <span>Plot Summary: </span>
                       {anilistResponse.description.substring(0, 200) + "... "}
                       <button onClick={() => readMoreHandler()}>
                         read more
@@ -188,7 +191,10 @@ function MalAnimeDetails() {
                 {width > 600 && (
                   <Episodes>
                     {consumeResponse.map((episode, i) => (
-                      <EpisodeLink key={episode.id} to={`/watch/${episode.id}`}>
+                      <EpisodeLink
+                        key={episode.id}
+                        to={`/watch/${id}/${episode.id}`}
+                      >
                         Episode {i + 1}
                       </EpisodeLink>
                     ))}
@@ -197,7 +203,10 @@ function MalAnimeDetails() {
                 {width <= 600 && (
                   <Episodes>
                     {consumeResponse.map((episode, i) => (
-                      <EpisodeLink key={episode.id} to={`/watch/${episode.id}`}>
+                      <EpisodeLink
+                        key={episode.id}
+                        to={`/watch/${id}/${episode.id}`}
+                      >
                         {i + 1}
                       </EpisodeLink>
                     ))}

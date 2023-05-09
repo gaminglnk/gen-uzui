@@ -48,13 +48,16 @@ function WatchingEpisodes() {
       console.log(err);
     });
     let output = [];
+    let uniqueIds = new Set();
     for (let i = 0; i < data.length; i++) {
       for (let j = 0; j < result.data.data.Page.media.length; j++) {
+        const media = result.data.data.Page.media[j];
         if (
-          parseInt(result.data.data.Page.media[j].idMal) ===
-          parseInt(data[i].malId)
+          parseInt(media.id) === parseInt(data[i].malId) &&
+          !uniqueIds.has(media.id)
         ) {
-          output.push(result.data.data.Page.media[j]);
+          output.push(media);
+          uniqueIds.add(media.id);
         }
       }
     }
@@ -131,7 +134,7 @@ function WatchingEpisodes() {
                 </IconContext.Provider>
 
                 <Link
-                  to={`play/${localData[i].animeId}/${localData[i].episode}`}
+                  to={`watch/${localData[i].malId}/${localData[i].episode}`}
                 >
                   <img src={item.coverImage.extraLarge} alt="" />
                 </Link>
@@ -139,10 +142,9 @@ function WatchingEpisodes() {
                   {item.title.english !== null
                     ? item.title.english
                     : item.title.userPreferred}
-                  {localData[i].isDub ? " (Dub)" : " (Sub)"}
                 </p>
                 <p className="episodeNumber">
-                  {"Episode - " + localData[i].episode}
+                  {"Episode - " + localData[i].enumId}
                 </p>
               </Wrapper>
             </SwiperSlide>

@@ -365,15 +365,26 @@ function VideoPlayer({
       <video
         id="player"
         playsInline
-        crossorigin
+        crossOrigin="true"
         data-poster={banner}
         style={{
           aspectRatio: 16 / 9,
         }}
       ></video>
+      <BottomFlex></BottomFlex>
     </div>
   );
 }
+
+const BottomFlex = styled.div`
+  display: flex;
+  align-items: center;
+  background-color: #242235;
+  border-radius: 0 0 1rem 1rem;
+  margin-bottom: 0.5rem;
+  height: 3px;
+  border-top: none;
+`;
 
 const Conttainer = styled.div`
   display: flex;
@@ -401,7 +412,6 @@ const Conttainer = styled.div`
   .tooltip {
     position: relative;
     display: inline-block;
-    border-bottom: 1px dotted black;
   }
 
   .tooltip .tooltiptext {

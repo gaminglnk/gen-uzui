@@ -219,7 +219,7 @@ query ($id: Int) {
 export let searchWatchedId = `
 query ($ids: [Int]) {
   Page(page: 1, perPage: 100) {
-    media(idMal_in: $ids, type: ANIME, sort: SEARCH_MATCH) {
+    media(id_in: $ids, type: ANIME, sort: SEARCH_MATCH) {
       title {
         romaji
         userPreferred

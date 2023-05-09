@@ -37,7 +37,7 @@ function App() {
         <Route path="/movies/:page" element={<PopularMovies />} />
         <Route path="/search/:name" element={<SearchResults />} />
         <Route path="/id/:id" element={<MalAnimeDetails />} />
-        <Route path="/watch/:episode" element={<WatchPage />} />
+        <Route path="/watch/:id/:episode" element={<WatchPage />} />
       </Routes>
       <Toaster
         toastOptions={{
