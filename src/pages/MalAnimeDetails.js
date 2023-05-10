@@ -19,6 +19,9 @@ function MalAnimeDetails() {
   const [mal, setMal] = useState();
   const [notAvailable, setNotAvailable] = useState(false);
 
+  const [group, setGroup] = useState(1);
+  const groupSize = 50;
+
   useEffect(() => {
     getInfo();
   }, []);
@@ -77,6 +80,22 @@ function MalAnimeDetails() {
       });
     setLoading(false);
   }
+
+  const totalGroups = Math.ceil((consumeResponse ?? []).length / groupSize);
+  const renderGroupButtons = () => {
+    const buttons = [];
+    for (let i = 1; i <= totalGroups; i++) {
+      const startSerial = (i - 1) * groupSize + 1;
+      const endSerial = Math.min(i * groupSize, (consumeResponse ?? []).length);
+      const buttonName = `• ${endSerial}`;
+      buttons.push(
+        <Sort key={i} onClick={() => setGroup(i)}>
+          {buttonName}
+        </Sort>
+      );
+    }
+    return buttons;
+  };
 
   return (
     <div>
@@ -179,35 +198,45 @@ function MalAnimeDetails() {
                 </div>
               </ContentWrapper>
               <Episode>
-                <Trail>
-                  <YouTube id={anilistResponse.trailer.id} />
-                </Trail>
+                {anilistResponse.trailer?.id && (
+                  <Trail>
+                    <YouTube id={anilistResponse.trailer.id} />
+                  </Trail>
+                )}
                 <br></br>
                 <DubContainer>
                   <h2>{`Episodes :`}</h2>
+                  <Sorter>
+                    <div>{renderGroupButtons()}</div>
+                  </Sorter>
                 </DubContainer>
+                <br></br>
                 {width > 600 && (
                   <Episodes>
-                    {consumeResponse.map((episode, i) => (
-                      <EpisodeLink
-                        key={episode.id}
-                        to={`/watch/${id}/${episode.id}`}
-                      >
-                        Episode {i + 1}
-                      </EpisodeLink>
-                    ))}
+                    {consumeResponse
+                      .slice((group - 1) * groupSize, group * groupSize) // Get episodes for the selected group
+                      .map((episode, i) => (
+                        <EpisodeLink
+                          key={episode.id}
+                          to={`/watch/${id}/${episode.id}`}
+                        >
+                          Episode {i + 1 + (group - 1) * groupSize}
+                        </EpisodeLink>
+                      ))}
                   </Episodes>
                 )}
                 {width <= 600 && (
                   <Episodes>
-                    {consumeResponse.map((episode, i) => (
-                      <EpisodeLink
-                        key={episode.id}
-                        to={`/watch/${id}/${episode.id}`}
-                      >
-                        {i + 1}
-                      </EpisodeLink>
-                    ))}
+                    {consumeResponse
+                      .slice((group - 1) * groupSize, group * groupSize) // Get episodes for the selected group
+                      .map((episode, i) => (
+                        <EpisodeLink
+                          key={episode.id}
+                          to={`/watch/${id}/${episode.id}`}
+                        >
+                          {i + 1 + (group - 1) * groupSize}
+                        </EpisodeLink>
+                      ))}
                   </Episodes>
                 )}
               </Episode>
@@ -218,6 +247,36 @@ function MalAnimeDetails() {
     </div>
   );
 }
+
+const Sorter = styled.div`
+  position: relative;
+  background: #242235;
+  border: 1px dashed #393653;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 10px;
+`;
+
+const Sort = styled.button`
+  color: white;
+  font-size: 0.95rem;
+  font-family: "Lexend", sans-serif;
+  background: #242235;
+  padding: 0.4rem 0.5rem 0.4rem 0.5rem;
+  margin: 0 2px;
+  border-radius: 2px;
+  border: 1px solid #393653;
+  text-decoration: none;
+  transition: 0.1s;
+
+  :hover {
+    transform: scale(0.95);
+    background-color: #7676ff;
+  }
+`;
 
 const Trail = styled.div`
   position: relative;
