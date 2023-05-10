@@ -205,7 +205,7 @@ function MalAnimeDetails() {
                 <br></br>
                 <DubContainer>
                   <h2>{`Episodes`}</h2>
-                 <br></br>
+                 <hr></hr>
                   <Sorter>
                     <div>{renderGroupButtons()}</div>
                   </Sorter>
@@ -248,13 +248,6 @@ function MalAnimeDetails() {
   );
 }
 
-const Break = styled.hr`
-  height: 2px;
-  border-width: 0;
-  color: #242235;
-  border-radius: 2px;
-  background-color: #242235;
-`;
 
 const Sorter = styled.div`
   position: relative;
