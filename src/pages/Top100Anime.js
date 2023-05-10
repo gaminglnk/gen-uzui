@@ -36,7 +36,7 @@ function Top100Anime() {
     });
     setLoading(false);
     setAnimeDetails(res.data.data.Page.media);
-    document.title = "Top 100 Anime - Himitsu";
+    document.title = "Top 100 Anime - Kimitsu";
   }
   return (
     <div>

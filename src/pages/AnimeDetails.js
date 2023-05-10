@@ -27,7 +27,7 @@ function AnimeDetails() {
     setLoading(false);
     setAnimeDetails(res.data);
     getLocalStorage(res.data);
-    document.title = res.data[0].gogoResponse.title + " - Himitsu";
+    document.title = res.data[0].gogoResponse.title + " - Kimitsu";
   }
 
   function readMoreHandler() {

@@ -10,7 +10,6 @@ import PopularMovies from "./pages/PopularMovies";
 import SearchResults from "./pages/SearchResults";
 import Top100Anime from "./pages/Top100Anime";
 import TrendingAnime from "./pages/TrendingAnime";
-import WatchAnime from "./pages/WatchAnime";
 import WatchPage from "./pages/WatchPage";
 import WatchAnimeV2 from "./pages/WatchAnimeV2";
 import GlobalStyle from "./styles/globalStyles";

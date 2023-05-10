@@ -35,7 +35,7 @@ function SearchResults() {
     });
     setLoading(false);
     setResults(res.data.data.Page.media);
-    document.title = urlParams + " - Himitsu";
+    document.title = urlParams + " - Kimitsu";
   }
   return (
     <div>

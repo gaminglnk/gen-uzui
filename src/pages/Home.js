@@ -40,8 +40,7 @@ function Home() {
     });
     setImages(result.data.data.Page.media);
     setLoading(false);
-    document.title =
-      "Himitsu - Watch Anime Free Online With English Sub and Dub";
+    document.title = "Kimitsu";
   }
 
   function checkSize() {
