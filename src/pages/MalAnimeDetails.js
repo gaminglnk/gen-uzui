@@ -205,7 +205,8 @@ function MalAnimeDetails() {
                 <br></br>
                 <DubContainer>
                   <h2>{`Episodes`}</h2>
-                 <hr/>
+                 <hr style={{ height: '2px', borderWidth: '0', color: '#242235', backgroundColor: '#242235' }} />
+
                   <Sorter>
                     <div>{renderGroupButtons()}</div>
                   </Sorter>
