@@ -63,10 +63,13 @@ function MalCards(props) {
           className="mySwiper"
         >
           {data.map((item, i) => (
-            <SwiperSlide>
+            <SwiperSlide key={item.mal_id + props.criteria}>
               <Wrapper>
                 <Link to={"id/" + item.mal_id}>
-                  <img src={item.images.webp.image_url} alt="" />
+                  <img
+                    src={item.images.webp.image_url}
+                    alt={item.title.substring(0, 6)}
+                  />
                 </Link>
                 <p>
                   {item.title_english !== null

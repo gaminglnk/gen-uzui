@@ -1,7 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import Nav from "./components/Navigation/Nav";
-import AnimeDetails from "./pages/AnimeDetails";
 import FavouriteAnime from "./pages/FavouriteAnime";
 import Home from "./pages/Home";
 import MalAnimeDetails from "./pages/MalAnimeDetails";
@@ -15,11 +14,7 @@ import WatchAnimeV2 from "./pages/WatchAnimeV2";
 import GlobalStyle from "./styles/globalStyles";
 
 /*Comments
-Mal Data is used in '/movies' and '/' only.
-
-        <Route path="/category/:slug" element={<AnimeDetails />} />
-        <Route path="/play/:slug/:episode" element={<WatchAnimeV2 />} />
-        <Route path="/watch/:episode" element={<WatchAnime />} />
+<Route path="/play/:slug/:episode" element={<WatchAnimeV2 />} />
 */
 
 function App() {

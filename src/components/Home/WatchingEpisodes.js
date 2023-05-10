@@ -136,7 +136,10 @@ function WatchingEpisodes() {
                 <Link
                   to={`watch/${localData[i].malId}/${localData[i].episode}`}
                 >
-                  <img src={item.coverImage.extraLarge} alt="" />
+                  <img
+                    src={item.coverImage.extraLarge}
+                    alt={item.title.userPreferred.substring(0, 10)}
+                  />
                 </Link>
                 <p>
                   {item.title.english !== null

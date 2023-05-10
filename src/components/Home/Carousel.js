@@ -33,17 +33,21 @@ function Carousel({ images }) {
         {images.map(
           (item, index) =>
             item.bannerImage !== null && (
-              <SwiperSlide>
+              <SwiperSlide key={item.id + "BIG"}>
                 <Container>
                   {width <= 600 && (
                     <img
                       src={item.bannerImage}
-                      alt=""
+                      alt={item.title.userPreferred.substring(0, 8)}
                       style={bannerImageStyleMobile}
                     />
                   )}
                   {width > 600 && (
-                    <img src={item.bannerImage} alt="" style={bannerImgStyle} />
+                    <img
+                      src={item.bannerImage}
+                      alt={item.title.userPreferred.substring(0, 8)}
+                      style={bannerImgStyle}
+                    />
                   )}
                   <Wrapper>
                     <Content>

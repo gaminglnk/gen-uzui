@@ -104,10 +104,13 @@ query ($perPage: Int, $page: Int) {
           className="mySwiper"
         >
           {data.map((item, i) => (
-            <SwiperSlide>
+            <SwiperSlide key={item.id + props.criteria}>
               <Wrapper>
                 <Link to={"id/" + item.id}>
-                  <img src={item.coverImage.large} alt="" />
+                  <img
+                    src={item.coverImage.large}
+                    alt={item.title.userPreferred.substring(0, 6)}
+                  />
                 </Link>
                 <p>
                   {item.title.english !== null
