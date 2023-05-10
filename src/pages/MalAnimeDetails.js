@@ -18,9 +18,7 @@ function MalAnimeDetails() {
   const [expanded, setExpanded] = useState(false);
   const [mal, setMal] = useState();
   const [notAvailable, setNotAvailable] = useState(false);
-
   const [group, setGroup] = useState(1);
-  const groupSize = 50;
 
   useEffect(() => {
     getInfo();
@@ -81,6 +79,7 @@ function MalAnimeDetails() {
     setLoading(false);
   }
 
+  const groupSize = consumeResponse?.length <= 100 ? 25 : 50;
   const totalGroups = Math.ceil((consumeResponse ?? []).length / groupSize);
   const renderGroupButtons = () => {
     const buttons = [];

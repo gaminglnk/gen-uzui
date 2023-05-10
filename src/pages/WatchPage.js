@@ -40,7 +40,7 @@ function WatchPage() {
     window.scrollTo(0, 0);
 
     let res = await axios.get(
-      `https://zoro-engine.vercel.app/meta/anilist/watch/${episode}`
+      `https://zoro-engine.vercel.app/anime/gogoanime/watch/${episode}`
     );
     setEpisodeLinks(res.data);
     setCurrentServer(res.data.headers.Referer);
