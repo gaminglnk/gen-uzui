@@ -14,7 +14,7 @@ function Nav() {
     <div>
       <NavBar>
         <Link to="/">
-          <LogoImg alt="Header Logo" src="./header-logo.svg" />
+          <LogoImg aria-label="Logo" alt="Logo" src="./header-logo.svg" />
         </Link>
         <div className="nav-links">
           <Links to="/trending/1">Trending</Links>
