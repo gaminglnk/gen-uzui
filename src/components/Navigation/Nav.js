@@ -34,7 +34,7 @@ function Nav() {
               },
             }}
           >
-            <Button id="search-btn" onClick={(e) => setIsActive(!isActive)}>
+            <Button aria-label="Search" id="search-btn" onClick={(e) => setIsActive(!isActive)}>
               <FiSearch />
             </Button>
           </IconContext.Provider>
@@ -50,7 +50,7 @@ function Nav() {
               },
             }}
           >
-            <Button id="search-btn" onClick={(e) => setIsActive(!isActive)}>
+            <Button aria-label="Search" id="search-btn" onClick={(e) => setIsActive(!isActive)}>
               <FiSearch />
               Search
             </Button>
