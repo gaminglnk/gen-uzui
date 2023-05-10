@@ -86,7 +86,7 @@ function MalAnimeDetails() {
     for (let i = 1; i <= totalGroups; i++) {
       const startSerial = (i - 1) * groupSize + 1;
       const endSerial = Math.min(i * groupSize, (consumeResponse ?? []).length);
-      const buttonName = `• ${endSerial}`;
+      const buttonName = `${endSerial}`;
       buttons.push(
         <Sort key={i} onClick={() => setGroup(i)}>
           {buttonName}
@@ -266,7 +266,7 @@ const Sort = styled.button`
   font-size: 0.95rem;
   font-family: "Lexend", sans-serif;
   background: #242235;
-  padding: 0.4rem 0.5rem 0.4rem 0.5rem;
+  padding: 0.4rem 0.65rem 0.4rem 0.65rem;
   margin: 0 2px;
   border-radius: 2px;
   border: 1px solid #393653;
