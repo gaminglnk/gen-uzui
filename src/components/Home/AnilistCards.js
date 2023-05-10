@@ -106,7 +106,7 @@ query ($perPage: Int, $page: Int) {
           {data.map((item, i) => (
             <SwiperSlide key={item.id + props.criteria}>
               <Wrapper>
-                <Link to={"id/" + item.id}>
+                <Link aria-label="Anime Card" to={"id/" + item.id}>
                   <img
                     src={item.coverImage.large}
                     alt={item.title.userPreferred.substring(0, 6)}
