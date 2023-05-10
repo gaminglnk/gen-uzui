@@ -97,13 +97,13 @@ function MalAnimeDetails() {
                     ? anilistResponse.bannerImage
                     : "https://cdn.wallpapersafari.com/41/44/6Q9Nwh.jpg"
                 }
-                alt=""
+                alt="Banner Img"
               />
               <ContentWrapper>
                 <Poster>
                   <img src={anilistResponse.coverImage.extraLarge} alt="" />
                   <Button
-                    key="wxjd"
+                    key="binge-now"
                     to={`/watch/${id}/${consumeResponse[0].id}`}
                   >
                     Binge Now
@@ -179,11 +179,9 @@ function MalAnimeDetails() {
                 </div>
               </ContentWrapper>
               <Episode>
-                {width <= 600 && (
-                  <Trail>
-                    <YouTube video={anilistResponse.trailer.id} />
-                  </Trail>
-                )}
+                <Trail>
+                  <YouTube id={anilistResponse.trailer.id} />
+                </Trail>
                 <br></br>
                 <DubContainer>
                   <h2>{`Episodes :`}</h2>
