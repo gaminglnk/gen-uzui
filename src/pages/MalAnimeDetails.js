@@ -204,9 +204,9 @@ function MalAnimeDetails() {
                 )}
                 <br></br>
                 <DubContainer>
-                  <h2>{`Episodes`}</h2>
-                 <br></br>
-                  <Sorter>
+                  <Sorter
+                    <h2>{`Episodes`}</h2>
+                    <br></br>
                     <div>{renderGroupButtons()}</div>
                   </Sorter>
                 </DubContainer>
