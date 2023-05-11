@@ -80,7 +80,7 @@ function Carousel({ images }) {
                             },
                           }}
                         >
-                          <Button to={"id/" + item.id}>
+                          <Button aria-label="Carousel Card" to={"id/" + item.id}>
                             <BsFillPlayFill />
                           </Button>
                         </IconContext.Provider>
@@ -96,7 +96,7 @@ function Carousel({ images }) {
                             },
                           }}
                         >
-                          <Button to={"id/" + item.id}>
+                          <Button aria-label="Carousel Card" to={"id/" + item.id}>
                             <BsFillPlayFill />
                             Watch Now
                           </Button>
