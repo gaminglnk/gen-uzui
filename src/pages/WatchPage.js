@@ -49,10 +49,6 @@ function WatchPage() {
         `https://zoro-engine.vercel.app/anime/gogoanime/watch/${episode}`
       );
 
-      const consumeResponsePromise = new META.Anilist().fetchEpisodesListById(
-        id
-      );
-
       const aniResPromise = axios({
         url: process.env.REACT_APP_BASE_URL,
         method: "POST",
@@ -66,9 +62,9 @@ function WatchPage() {
             id: id,
           },
         },
-      }).catch((err) => {
-        console.log(err);
       });
+
+      const consumeResponsePromise = new META.Anilist().fetchEpisodesListById(id);
 
       const [response, aniRes, consumeResponse] = await Promise.all([
         responsePromise,
