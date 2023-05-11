@@ -1,7 +1,7 @@
 
 # Kimitsu Github Repository
 
-![Kimitsu Screenshot](https://api.pikwy.com/web/645aec977b735a32883d0280.png)
+![Kimitsu Screenshot](https://api.pikwy.com/web/645c7977e1d56141773aea58.png)
 
 ## [Kimitsu](https://kimitsu.vercel.app/) is a React based anime streaming web app.
 
