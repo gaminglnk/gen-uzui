@@ -51,6 +51,7 @@ function SearchResults() {
                 <img
                   src={item.coverImage.extraLarge}
                   alt={item.title.userPreferred.substring(0, 8)}
+                  loading="lazy"
                 />
                 <p>
                   {item.title.english !== null

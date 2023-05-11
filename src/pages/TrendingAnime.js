@@ -52,6 +52,7 @@ function TrendingAnime() {
                 <img
                   src={item.coverImage.large}
                   alt={item.title.userPreferred.substring(0, 8)}
+                  loading="lazy"
                 />
                 <p>
                   {item.title.english !== null
