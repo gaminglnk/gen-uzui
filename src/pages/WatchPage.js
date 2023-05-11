@@ -460,7 +460,7 @@ const Conttainer = styled.div`
   .tooltip {
     position: relative;
     display: inline-block;
-    border-bottom: 1px dotted black;
+    border-bottom: none;
   }
 
   .tooltip .tooltiptext {
