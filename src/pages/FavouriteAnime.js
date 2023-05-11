@@ -49,7 +49,10 @@ function FavouriteAnime() {
           <CardWrapper>
             {animeDetails.map((item, i) => (
               <Links aria-label="Favourite's Card" to={"/id/" + item.id}>
-                <img src={item.coverImage.large} alt="" />
+                <img
+                  src={item.coverImage.large}
+                  alt={item.title.userPreferred.substring(0, 8)}
+                />
                 <p>
                   {item.title.english !== null
                     ? item.title.english

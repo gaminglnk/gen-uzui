@@ -48,7 +48,10 @@ function SearchResults() {
           <CardWrapper>
             {results.map((item, i) => (
               <Wrapper aria-label="Search Results" to={`/id/${item.id}`}>
-                <img src={item.coverImage.extraLarge} alt="" />
+                <img
+                  src={item.coverImage.extraLarge}
+                  alt={item.title.userPreferred.substring(0, 8)}
+                />
                 <p>
                   {item.title.english !== null
                     ? item.title.english
