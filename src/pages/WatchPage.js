@@ -39,6 +39,12 @@ function WatchPage() {
   useEffect(() => {
     getEpisodeLinks();
   }, [episode]);
+  
+  useEffect(() => {
+    if (animeDetails && animeDetails.bannerImage && !episodeThumb) {
+      setEpisodeThumb(animeDetails.bannerImage);
+    }
+  }, [animeDetails, episodeThumb]);
 
   async function getEpisodeLinks() {
     try {
@@ -66,7 +72,7 @@ function WatchPage() {
 
       const consumeResponsePromise = new META.Anilist().fetchEpisodesListById(id);
 
-      const [response, aniRes, consumeResponse] = await Promise.all([
+      const [response, aniRes, metaResponse] = await Promise.all([
         responsePromise,
         aniResPromise,
         consumeResponsePromise,
@@ -94,15 +100,12 @@ function WatchPage() {
       updateLocalStorage(episodeNumber, episode, id, gogoId);
 
       setAnimeDetails(aniRes.data.data.Media);
-      if (animeDetails.bannerImage) {
-        setEpisodeThumb(animeDetails.bannerImage);
-      }
       document.title = `${aniRes.data.data.Media.title.userPreferred} EP-${episodeNumber}`;
-      setConsumeResponse(consumeResponse);
+      setConsumeResponse(metaResponse);
       setLoading(false);
 
-      if (consumeResponse && consumeResponse.length > 0) {
-        const matchingObject = consumeResponse.find(
+      if (metaResponse && metaResponse.length > 0) {
+        const matchingObject = metaResponse.find(
           (obj) => obj.id === episode
         );
         if (matchingObject && matchingObject.image) {
@@ -111,7 +114,7 @@ function WatchPage() {
         }
       }
       if (!episodeThumb && animeDetails && animeDetails.bannerImage) {
-        setEpisodeThumb(animeDetails.bannerImage);
+        setEpisodeThumb(aniRes.data.data.Media.bannerImage);
       }
     } catch (error) {
       console.error("Error occurred:", error);
