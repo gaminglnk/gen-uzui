@@ -17,18 +17,23 @@ import toast from "react-hot-toast";
 import { META } from "@consumet/extensions";
 
 function WatchPage() {
+  /* Additionals */
   const { episode, id } = useParams();
-
-  const [episodeLinks, setEpisodeLinks] = useState([]);
-  const [currentServer, setCurrentServer] = useState("");
-  const [animeDetails, setAnimeDetails] = useState();
+  const corsProxy = "https://cors.zimjs.com/";
   const [gogoId, setGogoId] = useState();
   const [episodeNumber, setEpisodeNumber] = useState();
   const [episodeSource, setEpisodeSource] = useState();
+  const [episodeThumb, setEpisodeThumb] = useState();
   const [consumeResponse, setConsumeResponse] = useState();
+
+  /* Defaults */
+  const [episodeLinks, setEpisodeLinks] = useState([]);
+  const [currentServer, setCurrentServer] = useState("");
+  const [animeDetails, setAnimeDetails] = useState();
   const [loading, setLoading] = useState(true);
   const { width } = useWindowDimensions();
   const [fullScreen, setFullScreen] = useState(false);
+  const [notAvailable, setNotAvailable] = useState(false);
   const [internalPlayer, setInternalPlayer] = useState(true);
 
   useEffect(() => {
@@ -36,65 +41,88 @@ function WatchPage() {
   }, [episode]);
 
   async function getEpisodeLinks() {
-    setLoading(true);
-    window.scrollTo(0, 0);
+    try {
+      setLoading(true);
+      window.scrollTo(0, 0);
 
-    let res = await axios.get(
-      `https://zoro-engine.vercel.app/anime/gogoanime/watch/${episode}`
-    );
-    setEpisodeLinks(res.data);
-    setCurrentServer(res.data.headers.Referer);
-    var sourcesArray = res.data.sources;
-    var defaultQualityObj = sourcesArray.find(
-      (source) => source.quality === "default"
-    );
-    console.log(defaultQualityObj);
+      const responsePromise = axios.get(
+        `https://zoro-engine.vercel.app/anime/gogoanime/watch/${episode}`
+      );
 
-    /**/
-    var defaultQualitySource =
-      "https://cors.zimjs.com/" + defaultQualityObj.url;
-    setEpisodeSource(defaultQualitySource);
-    const episodeNumber = episode.match(/episode-(\d+)/i)[1];
-    setEpisodeNumber(episodeNumber);
-    const gogoId = episode.match(/^(.*?)(?:-episode-\d+)?$/i)[1];
-    setGogoId(gogoId);
-    updateLocalStorage(episodeNumber, episode, id, gogoId);
-    /**/
+      const consumeResponsePromise = new META.Anilist().fetchEpisodesListById(
+        id
+      );
 
-    if (!defaultQualityObj) {
-      setInternalPlayer(true);
-    }
-
-    let aniRes = await axios({
-      url: process.env.REACT_APP_BASE_URL,
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      data: {
-        query: searchByIdQuery,
-        variables: {
-          id: id,
+      const aniResPromise = axios({
+        url: process.env.REACT_APP_BASE_URL,
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
         },
-      },
-    }).catch((err) => {
-      console.log(err);
-    });
-
-    setAnimeDetails(aniRes.data.data.Media);
-    document.title = `${aniRes.data.data.Media.title.userPreferred} EP-${episodeNumber}`;
-
-    let fetchEP = new META.Anilist();
-    await fetchEP
-      .fetchEpisodesListById(id)
-      .then((data) => {
-        setConsumeResponse(data);
-      })
-      .catch((err) => {
+        data: {
+          query: searchByIdQuery,
+          variables: {
+            id: id,
+          },
+        },
+      }).catch((err) => {
         console.log(err);
       });
-    setLoading(false);
+
+      const [response, aniRes, consumeResponse] = await Promise.all([
+        responsePromise,
+        aniResPromise,
+        consumeResponsePromise,
+      ]);
+
+      setEpisodeLinks(response.data);
+      setCurrentServer(response.data.headers.Referer);
+
+      const sourcesArray = response.data.sources;
+      const defaultQualityObj = sourcesArray.find(
+        (source) => source.quality === "default"
+      );
+
+      if (defaultQualityObj) {
+        const defaultQualitySource = corsProxy + defaultQualityObj.url;
+        setEpisodeSource(defaultQualitySource);
+      } else {
+        setInternalPlayer(true);
+      }
+
+      const episodeNumber = episode.match(/episode-(\d+)/i)[1];
+      setEpisodeNumber(episodeNumber);
+      const gogoId = episode.match(/^(.*?)(?:-episode-\d+)?$/i)[1];
+      setGogoId(gogoId);
+      updateLocalStorage(episodeNumber, episode, id, gogoId);
+
+      setAnimeDetails(aniRes.data.data.Media);
+      if (animeDetails.bannerImage) {
+        setEpisodeThumb(animeDetails.bannerImage);
+      }
+      document.title = `${aniRes.data.data.Media.title.userPreferred} EP-${episodeNumber}`;
+      setConsumeResponse(consumeResponse);
+      setLoading(false);
+
+      if (consumeResponse && consumeResponse.length > 0) {
+        const matchingObject = consumeResponse.find(
+          (obj) => obj.id === episode
+        );
+        if (matchingObject && matchingObject.image) {
+          setEpisodeThumb(corsProxy + matchingObject.image);
+          return;
+        }
+      }
+      if (!episodeThumb && animeDetails && animeDetails.bannerImage) {
+        setEpisodeThumb(animeDetails.bannerImage);
+      }
+    } catch (error) {
+      console.error("Error occurred:", error);
+      setLoading(false);
+      setNotAvailable(true);
+      toast.error("An error occurred while fetching episode links.");
+    }
   }
 
   function fullScreenHandler(e) {
@@ -138,6 +166,12 @@ function WatchPage() {
 
   return (
     <div>
+      {notAvailable && (
+        <NotAvailable>
+          <img src="./assets/404.png" alt="404" />
+          <h1>Oops! Episode not found.</h1>
+        </NotAvailable>
+      )}
       {loading && <WatchAnimeSkeleton />}
       {!loading && (
         <Wrapper>
@@ -214,7 +248,7 @@ function WatchPage() {
                       internalPlayer={internalPlayer}
                       setInternalPlayer={setInternalPlayer}
                       title={`(${id}) - EP${episodeNumber}`}
-                      banner={animeDetails.bannerImage}
+                      banner={episodeThumb}
                       totalEpisodes={animeDetails.episodes}
                       currentEpisode={episodeNumber}
                       id={id}
@@ -461,6 +495,33 @@ const Conttainer = styled.div`
   .tooltip:hover .tooltiptext {
     visibility: visible;
     opacity: 1;
+  }
+`;
+
+const NotAvailable = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 5rem;
+  img {
+    width: 30rem;
+  }
+
+  h1 {
+    margin-top: -2rem;
+    font-weight: normal;
+    font-weight: 600;
+  }
+
+  @media screen and (max-width: 600px) {
+    img {
+      width: 18rem;
+    }
+
+    h1 {
+      font-size: 1.3rem;
+    }
   }
 `;
 
