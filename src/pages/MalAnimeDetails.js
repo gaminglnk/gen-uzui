@@ -54,8 +54,20 @@ function MalAnimeDetails() {
     setMal(aniRes.data.data.Media.idMal);
 
     let fetchEpisodes = new META.Anilist();
-    const data = await fetchEpisodes.fetchEpisodesListById(id);
+    let data;
+      
+    try {
+      data = await fetchEpisodes.fetchEpisodesListById(id);
+    } catch (error) {
+      console.log(error);
+      toast.error('Error occured, using fallback...', {
+        duration: 3000,
+      });
 
+      const fallbackRes = await axios.get(`https://zoro-engine.vercel.app/meta/anilist/episodes/${id}`);
+      data = fallbackRes.data;
+    }
+      
     if (data.length === 0) {
       setNotAvailable(true);
     } else {
