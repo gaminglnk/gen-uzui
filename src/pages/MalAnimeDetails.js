@@ -6,6 +6,7 @@ import AnimeDetailsSkeleton from "../components/skeletons/AnimeDetailsSkeleton";
 import useWindowDimensions from "../hooks/useWindowDimensions";
 import { searchByIdQuery } from "../hooks/searchQueryStrings";
 import { META } from "@consumet/extensions";
+import toast from "react-hot-toast";
 import YouTube from "../components/VideoPlayer/YouTube";
 
 function MalAnimeDetails() {
@@ -33,7 +34,8 @@ function MalAnimeDetails() {
       setNotAvailable(true);
       return;
     }
-    let aniRes = await axios({
+    try {
+    const aniRes = await axios({
       url: process.env.REACT_APP_BASE_URL,
       method: "POST",
       headers: {
@@ -46,43 +48,31 @@ function MalAnimeDetails() {
           id,
         },
       },
-    }).catch((err) => {
-      console.log(err);
     });
+
     setAnilistResponse(aniRes.data.data.Media);
     setMal(aniRes.data.data.Media.idMal);
 
-    /* let consumeRes = await axios
-      .get(`https://zoro-engine.vercel.app/meta/mal/info/${id}`)
-      .catch((err) => {
-        console.log(err);
-      });
-    console.log(consumeRes.data.episodes);
-    setConsumeResponse(consumeRes.data.episodes); */
+    let fetchEpisodes = new META.Anilist();
+    const data = await fetchEpisodes.fetchEpisodesListById(id);
 
-    let fetchEP = new META.Anilist();
-    await fetchEP
-      .fetchEpisodesListById(id)
-      .then((data) => {
-        if (data.length === 0) {
-          setNotAvailable(true);
-        } else {
-          // Check if episode 0 exists
-          const hasEpisodeZero = data.some((episode) => episode.number === 0);
+    if (data.length === 0) {
+      setNotAvailable(true);
+    } else {
+      const filteredData = data.filter((episode) => episode.number !== 0);
+      setConsumeResponse(filteredData);
+    }
 
-          // Filter out episode 0 if it exists
-          const filteredData = hasEpisodeZero
-            ? data.filter((episode) => episode.number !== 0)
-            : data;
-          setConsumeResponse(filteredData);
-        }
-        console.log("Meta  response (for devs) :", data);
-      })
-      .catch((err) => {
-        console.log(err);
-        setNotAvailable(true);
-      });
-    setLoading(false);
+    console.log('Meta response (for devs):', data);
+  } catch (err) {
+    console.log(err);
+    setNotAvailable(true);
+    toast.error('An error occured while fetching data', {
+      duration: 5000,
+    });
+  }
+
+  setLoading(false);
   }
 
   const groupSize = consumeResponse?.length <= 100 ? 25 : 50;
