@@ -49,9 +49,8 @@ function MalAnimeDetails() {
     }).catch((err) => {
       console.log(err);
     });
-    await setAnilistResponse(aniRes.data.data.Media);
-    await setMal(aniRes.data.data.Media.idMal);
-    await console.log(anilistResponse);
+    setAnilistResponse(aniRes.data.data.Media);
+    setMal(aniRes.data.data.Media.idMal);
 
     /* let consumeRes = await axios
       .get(`https://zoro-engine.vercel.app/meta/mal/info/${id}`)
@@ -68,7 +67,14 @@ function MalAnimeDetails() {
         if (data.length === 0) {
           setNotAvailable(true);
         } else {
-          setConsumeResponse(data);
+          // Check if episode 0 exists
+          const hasEpisodeZero = data.some((episode) => episode.number === 0);
+
+          // Filter out episode 0 if it exists
+          const filteredData = hasEpisodeZero
+            ? data.filter((episode) => episode.number !== 0)
+            : data;
+          setConsumeResponse(filteredData);
         }
         console.log("Meta  response (for devs) :", data);
       })
