@@ -72,11 +72,21 @@ function WatchPage() {
 
       const consumeResponsePromise = new META.Anilist().fetchEpisodesListById(id);
 
-      const [response, aniRes, metaResponse] = await Promise.all([
+      const [response, aniRes] = await Promise.all([
         responsePromise,
         aniResPromise,
-        consumeResponsePromise,
       ]);
+      
+      let metaResponse;
+      try {
+        metaResponse = await consumeResponsePromise;
+      } catch (error) {
+        console.error("consumeResponsePromise error:", error);
+        toast.error("Retrieval failed, using fallback.", {duration: 3000});
+
+        const fallbackRes = await axios.get(`https://zoro-engine.vercel.app/meta/anilist/episodes/${id}`);
+        metaResponse = fallbackRes.data;
+      }
 
       setEpisodeLinks(response.data);
       setCurrentServer(response.data.headers.Referer);
