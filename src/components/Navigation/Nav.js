@@ -14,7 +14,9 @@ function Nav() {
     <div>
       <NavBar>
         <Link to="/">
-          <LogoImg aria-label="Logo" alt="Logo" src="./header-logo.svg" />
+          <LogoContainer>
+            <LogoImg aria-label="Logo" alt="Logo" src="./header-logo.svg" />
+          </LogoContainer>
         </Link>
         <div className="nav-links">
           <Links to="/trending/1">Trending</Links>
@@ -63,11 +65,17 @@ function Nav() {
   );
 }
 
-const LogoImg = styled.img`
-  height: 3.5rem;
+const LogoContainer = styled.div`
+  height: 4rem;
   width: 4rem;
+`;
+
+const LogoImg = styled.img`
+  height: 100%;
+  width: 100%;
   border-radius: 4px;
   border: 2px solid rgba(48, 52, 54, 0.3);
+  object-fit: contain;
 `;
 
 const Shadow = styled.div`
@@ -114,11 +122,13 @@ const NavBar = styled.nav`
   justify-content: space-between;
   align-items: center;
   margin: 1.8rem 5rem 0 5rem;
+
   @media screen and (max-width: 600px) {
     margin: 1rem 2rem;
     margin-top: 1rem;
     img {
-      height: 1.7rem;
+      height: auto;
+      width: 3.5rem;
     }
     .nav-links {
       display: none;
