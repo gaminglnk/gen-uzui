@@ -68,6 +68,9 @@ function Nav() {
 const LogoContainer = styled.div`
   height: 4rem;
   width: 4rem;
+  justify-content: center;
+  align-items: center;
+  display: flex;
 `;
 
 const LogoImg = styled.img`
@@ -128,7 +131,7 @@ const NavBar = styled.nav`
     margin-top: 1rem;
     img {
       height: auto;
-      width: 3.5rem;
+      width: 2.85rem;
     }
     .nav-links {
       display: none;
