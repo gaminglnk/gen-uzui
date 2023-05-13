@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { FiSearch } from "react-icons/fi";
 import { CgClose } from "react-icons/cg";
 import { IconContext } from "react-icons";
+import { toast } from "react-hot-toast";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 
 function Search({ isActive, setIsActive }) {
@@ -15,6 +16,11 @@ function Search({ isActive, setIsActive }) {
     if (title !== "") {
       setIsActive(false);
       navigate("/search/" + title);
+      if (title.includes("/") || title.includes("\\")) {
+        toast.error("Can't contain forward/backward slash.", {duration: 3000});
+      } else {
+        navigate("/search/" + title);
+      }
     }
   }
 
@@ -92,6 +98,12 @@ function Search({ isActive, setIsActive }) {
               to={"/search/" + title}
               onClick={(e) => {
                 setIsActive(false);
+                if (title.includes("/") || title.includes("\\")) {
+                  e.preventDefault();
+                  toast.error("Can't contain forward/backward slash.", {duration: 3000});
+                } else {
+                  setIsActive(false);
+                }
               }}
             >
               Search
