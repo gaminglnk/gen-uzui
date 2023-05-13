@@ -86,6 +86,16 @@ function MalAnimeDetails() {
 
   setLoading(false);
   }
+  
+  const Genre = ({ genre }) => {
+  const genreLink = `https://anilist.co/search/anime?genres=${genre}`;
+
+  return (
+    <GenreButton as="a" href={genreLink} target="_blank" rel="noopener noreferrer">
+      {genre}
+    </GenreButton>
+  );
+  };
 
   const groupSize = consumeResponse?.length <= 100 ? 25 : 50;
   const totalGroups = Math.ceil((consumeResponse ?? []).length / groupSize);
@@ -184,7 +194,9 @@ function MalAnimeDetails() {
                   )}
                   <p>
                     <span>Genre: </span>
-                    {anilistResponse.genres.toString()}
+                    <GenreContainer>
+                      {anilistResponse.genres.map((genre, index) => ( <Genre key={index} genre={genre} /> ))}
+                    </GenreContainer>
                   </p>
                   <p>
                     <span>Released: </span>
@@ -256,6 +268,31 @@ function MalAnimeDetails() {
   );
 }
 
+const GenreContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 10px;
+  max-width: 100%;
+  overflow-x: hidden;
+`;
+
+const GenreButton = styled.button`
+  color: white;
+  font-size: 0.95rem;
+  font-family: "Lexend", sans-serif;
+  background: #242235;
+  padding: 0.4rem 0.65rem 0.4rem 0.65rem;
+  margin: 0 2px;
+  border-radius: 2px;
+  border: 1px solid #393653;
+  text-decoration: none;
+  transition: 0.1s;
+
+  :hover {
+    transform: scale(0.95);
+    background-color: #7676ff;
+  }
+`;
 
 const Sorter = styled.div`
   position: relative;
