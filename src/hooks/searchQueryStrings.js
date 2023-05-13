@@ -156,7 +156,7 @@ query ($perPage: Int, $page: Int) {
 export let searchAnimeQuery = `
 query ($search: String) {
   Page(page: 1, perPage: 100) {
-    media(search: $search, type: ANIME, sort: POPULARITY_DESC) {
+    media(search: $search, type: ANIME, sort: POPULARITY_DESC, isAdult: false) {
       idMal
       id
       title {
