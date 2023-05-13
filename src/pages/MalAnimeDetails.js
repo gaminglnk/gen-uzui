@@ -11,6 +11,7 @@ import YouTube from "../components/VideoPlayer/YouTube";
 
 function MalAnimeDetails() {
   let { id } = useParams();
+  const [showAllButtons, setShowAllButtons] = useState(false);
 
   const [loading, setLoading] = useState(true);
   const { width } = useWindowDimensions();
@@ -99,9 +100,13 @@ function MalAnimeDetails() {
 
   const groupSize = consumeResponse?.length <= 100 ? 25 : 50;
   const totalGroups = Math.ceil((consumeResponse ?? []).length / groupSize);
+  const visibleButtons = showAllButtons
+    ? totalGroups
+    : Math.min(totalGroups, MAX_VISIBLE_BUTTONS);
+
   const renderGroupButtons = () => {
     const buttons = [];
-    for (let i = 1; i <= totalGroups; i++) {
+    for (let i = 1; i <= visibleButtons; i++) {
       const startSerial = (i - 1) * groupSize + 1;
       const endSerial = Math.min(i * groupSize, (consumeResponse ?? []).length);
       const buttonName = `${endSerial}`;
@@ -225,9 +230,9 @@ function MalAnimeDetails() {
                 <br></br>
                 <DubContainer>
                   <Sorter>
-                    <h2>{`Episodes`}</h2>
+                    <h2>Episodes</h2>
                     <br></br>
-                    <div>{renderGroupButtons()}</div>
+                    <div>{renderGroupButtons()}{totalGroups > MAX_VISIBLE_BUTTONS && ( <ShowAllButton onClick={() => setShowAllButtons(!showAllButtons)}> {showAllButtons ? 'Show Less' : 'Show All'} </ShowAllButton> )}</div>
                   </Sorter>
                 </DubContainer>
                 <br></br>
@@ -294,6 +299,23 @@ const GenreButton = styled.button`
   }
 `;
 
+const MAX_VISIBLE_BUTTONS = 10;
+const ShowAllButton = styled.button`
+  background: none;
+  border: none;
+  color: #7676ff;
+  font-size: 0.95rem;
+  font-family: "Lexend", sans-serif;
+  cursor: pointer;
+  margin-left: auto;
+  padding: 0.4rem 0.65rem;
+  transition: 0.1s;
+  :hover {
+    transform: scale(0.95);
+    color: #393653;
+  }
+`;
+
 const Sorter = styled.div`
   position: relative;
   background: #242235;
@@ -302,8 +324,26 @@ const Sorter = styled.div`
   margin-bottom: 10px;
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  justify-content: center; /* Center align the buttons */
+  align-items: center;
   padding: 10px;
+  margin-top: 1.5rem;
+
+  h2 {
+    text-align: left;
+    margin-bottom: 10px;
+  }
+
+  button {
+    flex: 0 0 calc(33.33% - 10px); /* Show a maximum of three buttons per line with a gap of 10px */
+    margin-bottom: 10px; /* Add a line gap between the buttons */
+  }
+
+  @media (max-width: 768px) {
+    button {
+      flex: 0 0 calc(50% - 5px); /* Show a maximum of two buttons per line with a gap of 5px on smaller screens */
+    }
+  }
 `;
 
 const Sort = styled.button`
