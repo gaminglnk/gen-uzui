@@ -328,20 +328,20 @@ const Sorter = styled.div`
   align-items: center;
   padding: 10px;
   margin-top: 1.5rem;
+  gap: 5px;
 
   h2 {
-    text-align: left;
     margin-bottom: 10px;
   }
 
   button {
-    flex: 0 0 calc(33.33% - 10px); /* Show a maximum of three buttons per line with a gap of 10px */
-    margin-bottom: 10px; /* Add a line gap between the buttons */
+    flex: 0 0 calc(33.33% - 10px);
+    margin-bottom: 10px;
   }
 
   @media (max-width: 768px) {
     button {
-      flex: 0 0 calc(50% - 5px); /* Show a maximum of two buttons per line with a gap of 5px on smaller screens */
+      flex: 0 0 calc(50% - 5px);
     }
   }
 `;
