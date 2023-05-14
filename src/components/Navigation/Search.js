@@ -17,7 +17,7 @@ function Search({ isActive, setIsActive }) {
       setIsActive(false);
       navigate("/search/" + title);
       if (title.includes("/") || title.includes("\\")) {
-        toast.error("Can't contain forward/backward slash.", {duration: 3000});
+        toast.error("Can't contain forward/backward slash.", {duration: 1500});
       } else {
         navigate("/search/" + title);
       }
@@ -100,7 +100,7 @@ function Search({ isActive, setIsActive }) {
                 setIsActive(false);
                 if (title.includes("/") || title.includes("\\")) {
                   e.preventDefault();
-                  toast.error("Can't contain forward/backward slash.", {duration: 3000});
+                  toast.error("Can't contain forward/backward slash.", {duration: 1500});
                 } else {
                   setIsActive(false);
                 }
