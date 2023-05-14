@@ -92,7 +92,7 @@ function MalAnimeDetails() {
   const genreLink = `https://anilist.co/search/anime?genres=${genre}`;
 
   return (
-    <GenreButton as="a" href={genreLink} target="_blank" rel="noopener noreferrer">
+    <GenreButton key={genre} to={`/genre/${genre}`} >
       {genre}
     </GenreButton>
   );
@@ -281,7 +281,7 @@ const GenreContainer = styled.div`
   overflow-x: hidden;
 `;
 
-const GenreButton = styled.button`
+const GenreButton = styled(Link)`
   color: white;
   font-size: 0.95rem;
   font-family: "Lexend", sans-serif;
