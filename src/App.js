@@ -10,7 +10,7 @@ import SearchResults from "./pages/SearchResults";
 import Top100Anime from "./pages/Top100Anime";
 import TrendingAnime from "./pages/TrendingAnime";
 import WatchPage from "./pages/WatchPage";
-import WatchAnimeV2 from "./pages/WatchAnimeV2";
+import GenreResults from "./pages/GenreResults";
 import GlobalStyle from "./styles/globalStyles";
 
 /*Comments
@@ -30,6 +30,7 @@ function App() {
         <Route path="/top100/:page" element={<Top100Anime />} />
         <Route path="/movies/:page" element={<PopularMovies />} />
         <Route path="/search/:name" element={<SearchResults />} />
+        <Route path="/genre/:genre" element={<GenreResults />} />
         <Route path="/id/:id" element={<MalAnimeDetails />} />
         <Route path="/watch/:id/:episode" element={<WatchPage />} />
       </Routes>
