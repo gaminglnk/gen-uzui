@@ -43,7 +43,7 @@ function GenreResults() {
       {!loading && (
         <Parent>
           <Heading>
-            <span>Genre</span> Results
+            <span>{`«${urlParams}»`}</span> Results
           </Heading>
           <CardWrapper>
             {results.map((item, i) => (
