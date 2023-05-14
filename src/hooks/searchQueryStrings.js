@@ -176,6 +176,29 @@ query ($search: String) {
 }
 `;
 
+export let genreAnimeQuery = `
+query ($genre: String) {
+  Page(page: 1, perPage: 100) {
+    media(genre: $genre, type: ANIME, sort: POPULARITY_DESC, isAdult: false) {
+      idMal
+      id
+      title {
+        romaji
+        english
+        native
+        userPreferred
+      }
+      genres
+      bannerImage
+      coverImage {
+        extraLarge
+        large
+      }
+    }
+  }
+}
+`;
+
 export let searchByIdQuery = `
 query ($id: Int) {
   Media(id: $id, type: ANIME) {
