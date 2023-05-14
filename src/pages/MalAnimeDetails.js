@@ -223,15 +223,17 @@ function MalAnimeDetails() {
               </ContentWrapper>
               <Episode>
                 {anilistResponse.trailer?.id && (
-                  <Trail>
-                    <YouTube id={anilistResponse.trailer.id} />
-                  </Trail>
+                 <>
+                   <Trail>
+                     <YouTube id={anilistResponse.trailer.id} />
+                   </Trail>
+                   <div style={{ height: "1px", backgroundColor: "#393653", borderRadius: "2px", margin: "10px 0", }} ></div>
+                 </>
                 )}
                 <br></br>
+                <span style={{ textAlign: 'left', marginBottom: '0.35rem' }}>Episodes »</span>
                 <DubContainer>
                   <Sorter>
-                    <h2>Episodes</h2>
-                    <br></br>
                     <div>{renderGroupButtons()}{totalGroups > MAX_VISIBLE_BUTTONS && ( <ShowAllButton onClick={() => setShowAllButtons(!showAllButtons)}> {showAllButtons ? 'Show Less' : 'Show All'} </ShowAllButton> )}</div>
                   </Sorter>
                 </DubContainer>
