@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import styled from "styled-components";
-import SearchResultsSkeleton from "../components/skeletons/SearchResultsSkeleton";
+import GenreResultsSkeleton from "../components/skeletons/GenreResultsSkeleton";
 import { genreAnimeQuery } from "../hooks/searchQueryStrings";
 
 function GenreResults() {
@@ -39,7 +39,7 @@ function GenreResults() {
   }
   return (
     <div>
-      {loading && <SearchResultsSkeleton />}
+      {loading && <GenreResultsSkeleton />}
       {!loading && (
         <Parent>
           <Heading>
@@ -61,7 +61,7 @@ function GenreResults() {
               </Wrapper>
             ))}
           </CardWrapper>
-          {results.length === 0 && <h2>No Anime in the Genre</h2>}
+          {results.length === 0 && <h2>Genre has no Anime</h2>}
         </Parent>
       )}
     </div>
