@@ -235,6 +235,29 @@ query ($id: Int) {
       extraLarge
       large
     }
+    relations {
+      edges {
+        id
+        relationType
+        node {
+          id
+          idMal
+          coverImage {
+            extraLarge
+            large
+            medium
+          }
+          title {
+            romaji
+            english
+            native
+            userPreferred
+          }
+          episodes
+          meanScore
+        }
+      }
+    }
   }
 }
 `;
