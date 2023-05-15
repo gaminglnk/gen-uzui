@@ -441,17 +441,6 @@ function WatchPage() {
                     {consumeResponse?.length <= 80 ? (
                         <>
                           <DubContainer></DubContainer> 
-                          {width > 600 ? (
-                            <Episodes>
-                              {consumeResponse?.map((episode, i) => (
-                                <EpisodeLink
-                                  key={episode.id}
-                                  to={`/watch/${id}/${episode.id}`}
-                                >
-                                Episode {i + 1}
-                              </EpisodeLink>
-                              ))}
-                            </Episodes> ) : (
                             <Episodes>
                               {consumeResponse?.map((episode, i) => (
                                 <EpisodeLink
@@ -461,7 +450,7 @@ function WatchPage() {
                                  {i + 1}
                                 </EpisodeLink>
                               ))}
-                            </Episodes> )}
+                            </Episodes>
                           </>
                      ) : (
                         <>
@@ -478,20 +467,6 @@ function WatchPage() {
                             </Sorter>
                           </DubContainer>
                           <br></br>
-                          {width > 600 ? (
-                            <Episodes>
-                              {consumeResponse
-                                .slice((group - 1) * groupSize, group * groupSize) // Get episodes for the selected group
-                                .map((episode, i) => (
-                                  <EpisodeLink
-                                    key={episode.id}
-                                    to={`/watch/${id}/${episode.id}`}
-                                  >
-                                    Episode {i + 1 + (group - 1) * groupSize}
-                                  </EpisodeLink>
-                                ))}
-                            </Episodes>
-                          ) : (
                             <Episodes>
                               {consumeResponse
                                 .slice((group - 1) * groupSize, group * groupSize) // Get episodes for the selected group
@@ -504,7 +479,6 @@ function WatchPage() {
                                   </EpisodeLink>
                                 ))}
                             </Episodes>
-                          )}
                         </>
                       )}
                 </EpisodesWrapper>
