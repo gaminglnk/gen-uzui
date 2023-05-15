@@ -25,6 +25,8 @@ function WatchPage() {
   const [episodeSource, setEpisodeSource] = useState();
   const [episodeThumb, setEpisodeThumb] = useState();
   const [consumeResponse, setConsumeResponse] = useState();
+  const [showAllButtons, setShowAllButtons] = useState(false);
+  const [group, setGroup] = useState(1);
 
   /* Defaults */
   const [episodeLinks, setEpisodeLinks] = useState([]);
@@ -172,6 +174,28 @@ function WatchPage() {
       localStorage.setItem("Watching", data);
     }
   }
+  
+  const groupSize = consumeResponse?.length <= 80 ? consumeResponse?.length : 70;
+  const totalGroups = Math.ceil((consumeResponse?.length ?? 0) / groupSize);
+  const visibleButtons = showAllButtons
+    ? totalGroups
+    : Math.min(totalGroups, MAX_VISIBLE_BUTTONS);
+
+  const renderGroupButtons = () => {
+    const buttons = [];
+    for (let i = 1; i <= visibleButtons; i++) {
+      const startSerial = (i - 1) * groupSize + 1;
+      const endSerial = Math.min(i * groupSize, (consumeResponse ?? []).length);
+      const buttonName = `${endSerial}`;
+      buttons.push(
+        <Sort key={i} onClick={() => setGroup(i)}>
+          {buttonName}
+        </Sort>
+      );
+    }
+    return buttons;
+  };
+
 
   return (
     <div>
@@ -413,17 +437,76 @@ function WatchPage() {
                   </EpisodeButtons>
                 </div>
                 <EpisodesWrapper>
-                  <p>Episodes</p>
-                  <Episodes>
-                    {consumeResponse.map((episode, i) => (
-                      <EpisodeLink
-                        key={episode.id}
-                        to={`/watch/${id}/${episode.id}`}
-                      >
-                        {i + 1}
-                      </EpisodeLink>
-                    ))}
-                  </Episodes>
+                  <span style={{ textAlign: 'left', marginBottom: '0.35rem' }}>Episodes »</span>
+                    {consumeResponse?.length <= 80 ? (
+                        <>
+                          <DubContainer></DubContainer> 
+                          {width > 600 ? (
+                            <Episodes>
+                              {consumeResponse?.map((episode, i) => (
+                                <EpisodeLink
+                                  key={episode.id}
+                                  to={`/watch/${id}/${episode.id}`}
+                                >
+                                Episode {i + 1}
+                              </EpisodeLink>
+                              ))}
+                            </Episodes> ) : (
+                            <Episodes>
+                              {consumeResponse?.map((episode, i) => (
+                                <EpisodeLink
+                                  key={episode.id}
+                                  to={`/watch/${id}/${episode.id}`}
+                                >
+                                 {i + 1}
+                                </EpisodeLink>
+                              ))}
+                            </Episodes> )}
+                          </>
+                     ) : (
+                        <>
+                          <DubContainer>
+                            <Sorter>
+                              <div>
+                                {renderGroupButtons()}
+                                {totalGroups > MAX_VISIBLE_BUTTONS && (
+                                  <ShowAllButton onClick={() => setShowAllButtons(!showAllButtons)}>
+                                    {showAllButtons ? 'Show Less' : 'Show All'}
+                                  </ShowAllButton>
+                                )}
+                              </div>
+                            </Sorter>
+                          </DubContainer>
+                          <br></br>
+                          {width > 600 ? (
+                            <Episodes>
+                              {consumeResponse
+                                .slice((group - 1) * groupSize, group * groupSize) // Get episodes for the selected group
+                                .map((episode, i) => (
+                                  <EpisodeLink
+                                    key={episode.id}
+                                    to={`/watch/${id}/${episode.id}`}
+                                  >
+                                    Episode {i + 1 + (group - 1) * groupSize}
+                                  </EpisodeLink>
+                                ))}
+                            </Episodes>
+                          ) : (
+                            <Episodes>
+                              {consumeResponse
+                                .slice((group - 1) * groupSize, group * groupSize) // Get episodes for the selected group
+                                .map((episode, i) => (
+                                  <EpisodeLink
+                                    key={episode.id}
+                                    to={`/watch/${id}/${episode.id}`}
+                                  >
+                                    {i + 1 + (group - 1) * groupSize}
+                                  </EpisodeLink>
+                                ))}
+                            </Episodes>
+                          )}
+                        </>
+                      )}
                 </EpisodesWrapper>
               </VideoPlayerWrapper>
             </div>
@@ -433,6 +516,137 @@ function WatchPage() {
     </div>
   );
 }
+
+const MAX_VISIBLE_BUTTONS = 10;
+const ShowAllButton = styled.button`
+  background: none;
+  border: none;
+  color: #7676ff;
+  font-size: 0.95rem;
+  font-family: "Lexend", sans-serif;
+  cursor: pointer;
+  margin-left: auto;
+  padding: 0.4rem 0.65rem;
+  transition: 0.1s;
+
+  :hover {
+    transform: scale(0.95);
+    color: #393653;
+  }
+`;
+
+const Sorter = styled.div`
+  position: relative;
+  background: #242235;
+  border: 1px dashed #393653;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* Center align the buttons */
+  align-items: center;
+  padding: 10px;
+  margin-top: 1.5rem;
+
+  h2 {
+    margin-bottom: 10px; /* Add a line gap between the h2 tag and buttons */
+  }
+
+  button {
+    flex: 0 0 calc(33.33% - 10px); /* Show a maximum of three buttons per line with a gap of 10px */
+    margin-bottom: 10px; /* Add a line gap between the buttons */
+  }
+
+  @media (max-width: 768px) {
+    button {
+      flex: 0 0 calc(50% - 5px); /* Show a maximum of two buttons per line with a gap of 5px on smaller screens */
+    }
+  }
+`;
+
+
+const Sort = styled.button`
+  color: white;
+  font-size: 0.95rem;
+  font-family: "Lexend", sans-serif;
+  background: #242235;
+  padding: 0.4rem 0.65rem 0.4rem 0.65rem;
+  margin: 0 2px;
+  border-radius: 2px;
+  border: 1px solid #393653;
+  text-decoration: none;
+  transition: 0.1s;
+
+  :hover {
+    transform: scale(0.95);
+    background-color: #7676ff;
+  }
+`;
+
+const DubContainer = styled.div`
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 0.5rem;
+
+  .switch {
+    position: relative;
+
+    label {
+      display: flex;
+      align-items: center;
+      font-family: "Lexend", sans-serif;
+      font-weight: 400;
+      cursor: pointer;
+      margin-bottom: 0.3rem;
+    }
+
+    .label {
+      margin-bottom: 0.7rem;
+      font-weight: 500;
+    }
+
+    .indicator {
+      position: relative;
+      width: 60px;
+      height: 30px;
+      background: #242235;
+      border: 2px solid #393653;
+      display: block;
+      border-radius: 30px;
+      margin-right: 10px;
+      margin-bottom: 10px;
+
+      &:before {
+        width: 22px;
+        height: 22px;
+        content: "";
+        display: block;
+        background: #7676ff;
+        border-radius: 26px;
+        transform: translate(2px, 2px);
+        position: relative;
+        z-index: 2;
+        transition: all 0.5s;
+      }
+    }
+    input {
+      visibility: hidden;
+      position: absolute;
+
+      &:checked {
+        & + .indicator {
+          &:before {
+            transform: translate(32px, 2px);
+          }
+          &:after {
+            width: 54px;
+          }
+        }
+      }
+    }
+  }
+`;
 
 const VideoPlayerWrapper = styled.div`
   display: grid;
