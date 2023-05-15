@@ -101,7 +101,7 @@ function MalAnimeDetails() {
   
   const groupSize = consumeResponse?.length <= 80 ? consumeResponse?.length : 70;
   const totalGroups = Math.ceil((consumeResponse?.length ?? 0) / groupSize);
-  visibleButtons = showAllButtons
+  const visibleButtons = showAllButtons
     ? totalGroups
     : Math.min(totalGroups, MAX_VISIBLE_BUTTONS);
 
