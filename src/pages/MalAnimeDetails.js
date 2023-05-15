@@ -91,7 +91,6 @@ function MalAnimeDetails() {
   
   const Genre = ({ genre }) => {
   const genreLink = `https://anilist.co/search/anime?genres=${genre}`;
-
   return (
     <GenreButton key={genre} to={`/genre/${genre}`} >
       {genre}
@@ -99,9 +98,10 @@ function MalAnimeDetails() {
   );
   };
 
-  const groupSize = consumeResponse?.length <= 100 ? 25 : 50;
-  const totalGroups = Math.ceil((consumeResponse ?? []).length / groupSize);
-  const visibleButtons = showAllButtons
+  
+  const groupSize = consumeResponse?.length <= 80 ? consumeResponse?.length : 70;
+  const totalGroups = Math.ceil((consumeResponse?.length ?? 0) / groupSize);
+  visibleButtons = showAllButtons
     ? totalGroups
     : Math.min(totalGroups, MAX_VISIBLE_BUTTONS);
 
@@ -267,41 +267,76 @@ function MalAnimeDetails() {
                 )}
                 <br></br>
                 <span style={{ textAlign: 'left', marginBottom: '0.35rem' }}>Episodes »</span>
-                <DubContainer>
-                  <Sorter>
-                    <div>{renderGroupButtons()}{totalGroups > MAX_VISIBLE_BUTTONS && ( <ShowAllButton onClick={() => setShowAllButtons(!showAllButtons)}> {showAllButtons ? 'Show Less' : 'Show All'} </ShowAllButton> )}</div>
-                  </Sorter>
-                </DubContainer>
-                <br></br>
-                {width > 600 && (
-                  <Episodes>
-                    {consumeResponse
-                      .slice((group - 1) * groupSize, group * groupSize) // Get episodes for the selected group
-                      .map((episode, i) => (
-                        <EpisodeLink
-                          key={episode.id}
-                          to={`/watch/${id}/${episode.id}`}
-                        >
-                          Episode {i + 1 + (group - 1) * groupSize}
-                        </EpisodeLink>
-                      ))}
-                  </Episodes>
-                )}
-                {width <= 600 && (
-                  <Episodes>
-                    {consumeResponse
-                      .slice((group - 1) * groupSize, group * groupSize) // Get episodes for the selected group
-                      .map((episode, i) => (
-                        <EpisodeLink
-                          key={episode.id}
-                          to={`/watch/${id}/${episode.id}`}
-                        >
-                          {i + 1 + (group - 1) * groupSize}
-                        </EpisodeLink>
-                      ))}
-                  </Episodes>
-                )}
-              </Episode>
+                    {consumeResponse?.length <= 80 ? (
+                        <>
+                          <DubContainer></DubContainer> 
+                          {width > 600 ? (
+                            <Episodes>
+                              {consumeResponse?.map((episode, i) => (
+                                <EpisodeLink
+                                  key={episode.id}
+                                  to={`/watch/${id}/${episode.id}`}
+                                >
+                                Episode {i + 1}
+                              </EpisodeLink>
+                              ))}
+                            </Episodes> ) : (
+                            <Episodes>
+                              {consumeResponse?.map((episode, i) => (
+                                <EpisodeLink
+                                  key={episode.id}
+                                  to={`/watch/${id}/${episode.id}`}
+                                >
+                                 {i + 1}
+                                </EpisodeLink>
+                              ))}
+                            </Episodes> )}
+                          </>
+                     ) : (
+                        <>
+                          <DubContainer>
+                            <Sorter>
+                              <div>
+                                {renderGroupButtons()}
+                                {totalGroups > MAX_VISIBLE_BUTTONS && (
+                                  <ShowAllButton onClick={() => setShowAllButtons(!showAllButtons)}>
+                                    {showAllButtons ? 'Show Less' : 'Show All'}
+                                  </ShowAllButton>
+                                )}
+                              </div>
+                            </Sorter>
+                          </DubContainer>
+                          <br></br>
+                          {width > 600 ? (
+                            <Episodes>
+                              {consumeResponse
+                                .slice((group - 1) * groupSize, group * groupSize) // Get episodes for the selected group
+                                .map((episode, i) => (
+                                  <EpisodeLink
+                                    key={episode.id}
+                                    to={`/watch/${id}/${episode.id}`}
+                                  >
+                                    Episode {i + 1 + (group - 1) * groupSize}
+                                  </EpisodeLink>
+                                ))}
+                            </Episodes>
+                          ) : (
+                            <Episodes>
+                              {consumeResponse
+                                .slice((group - 1) * groupSize, group * groupSize) // Get episodes for the selected group
+                                .map((episode, i) => (
+                                  <EpisodeLink
+                                    key={episode.id}
+                                    to={`/watch/${id}/${episode.id}`}
+                                  >
+                                    {i + 1 + (group - 1) * groupSize}
+                                  </EpisodeLink>
+                                ))}
+                            </Episodes>
+                          )}
+                        </>
+                      )}
+                </Episode>
             </div>
           )}
         </Content>
