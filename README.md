@@ -1,19 +1,19 @@
 
-# Kimitsu Github Repository
+# Kimitsu - v2.3
 
-![Kimitsu Screenshot](https://api.pikwy.com/web/645c7977e1d56141773aea58.png)
+![Kimitsu Screenshot](https://kimitsu.vercel.app/twitter-image.png)
 
 ## [Kimitsu](https://kimitsu.vercel.app/) is a React based anime streaming web app.
 
 Made with ❤️ using Anilist and Consumet.ts API and libraries.
 <br/>
-Media contents aren't stored on our servers, they are just loaded from third party sources where it is freely availabel on the internet.
+Media contents aren't stored on our servers, they are just loaded from third party sources where it is freely available on the internet.
 
 
 ## Node initialisation :
-### `npm i` (Install the dependencies)
+### `npm i` "Configure"
 
-### `npm start` (Run locally)
+### `npm start` "Start locally"
 
 
 The required environmental variables are as follows : <br />
