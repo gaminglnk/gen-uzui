@@ -54,7 +54,7 @@ function WatchPage() {
       window.scrollTo(0, 0);
 
       const responsePromise = axios.get(
-        `https://zoro-engine.vercel.app/anime/gogoanime/watch/${episode}`
+        `${process.env.REACT_APP_BACK_URL}/anime/gogoanime/watch/${episode}`
       );
 
       const aniResPromise = axios({
@@ -86,7 +86,7 @@ function WatchPage() {
         console.error("consumeResponsePromise error:", error);
         toast.error("Retrieval failed, using fallback.", {duration: 3000});
 
-        const fallbackRes = await axios.get(`https://zoro-engine.vercel.app/meta/anilist/episodes/${id}`);
+        const fallbackRes = await axios.get(`${process.env.REACT_APP_BACK_URL}/meta/anilist/episodes/${id}`);
         metaResponse = fallbackRes.data;
       }
 

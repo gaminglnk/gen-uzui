@@ -66,7 +66,7 @@ function MalAnimeDetails() {
         duration: 3000,
       });
 
-      const fallbackRes = await axios.get(`https://zoro-engine.vercel.app/meta/anilist/episodes/${id}`);
+      const fallbackRes = await axios.get(`${process.env.REACT_APP_BACK_URL}/meta/anilist/episodes/${id}`);
       data = fallbackRes.data;
     }
       
