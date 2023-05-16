@@ -8,6 +8,7 @@ import { searchByIdQuery } from "../hooks/searchQueryStrings";
 import { META } from "@consumet/extensions";
 import toast from "react-hot-toast";
 import YouTube from "../components/VideoPlayer/YouTube";
+import Relations from "../components/Home/Relations.js"
 
 function MalAnimeDetails() {
   let { id } = useParams();
@@ -220,42 +221,26 @@ function MalAnimeDetails() {
                     <span>Status: </span>
                     {anilistResponse.status}
                   </p>
-                  {anilistResponse.relations.edges &&
+                  {width > 600 && anilistResponse.relations.edges &&
                     anilistResponse.relations.edges.some(
                       (edge) =>
                         edge.relationType === 'PREQUEL' || edge.relationType === 'SEQUEL'
                          ) && (
-                           <FlexWrapper>
-                             {anilistResponse.relations.edges.map((edge, i) => {
-                               if (
-                                 edge.relationType === 'PREQUEL' ||
-                                 edge.relationType === 'SEQUEL'
-                               ) {
-                               return (
-                                <Relations key={i}>
-                                 <Link aria-label="Related Anime" to={`/id/${edge.node.id}`}>
-                                 <img
-                                   src={edge.node.coverImage.large}
-                                   alt={edge.node.title.userPreferred.substring(0, 7)}
-                                 />
-                                 <span className="overlay">
-                                 {edge.relationType === 'PREQUEL' ? 'PREQUEL' : 'SEQUEL'}
-                                 </span>
-                                 </Link>
-                                 <p>
-                                  {edge.node.title.english !== null
-                                   ? edge.node.title.english.substring(0, 35) + '...'
-                                   : edge.node.title.userPreferred.substring(0, 35) + '... '}
-                                 </p>
-                                </Relations>
-                               );
-                             }
-                             return null;
-                           })}
-                         </FlexWrapper>
+                         <>
+                           <Relations anilistData={anilistResponse}/>
+                         </>
                        )}
                 </div>
               </ContentWrapper>
+              {width <= 600 && anilistResponse.relations.edges &&
+                    anilistResponse.relations.edges.some(
+                      (edge) =>
+                        edge.relationType === 'PREQUEL' || edge.relationType === 'SEQUEL'
+                         ) && (
+                         <>
+                           <Relations anilistData={anilistResponse}/>
+                         </>
+                       )}
               <Episode>
                 {anilistResponse.trailer?.id && (
                  <>
@@ -344,53 +329,6 @@ function MalAnimeDetails() {
     </div>
   );
 }
-
-const Relations = styled.div`
-  position: relative;
-
-  img {
-    width: 160px;
-    height: 235px;
-    border-radius: 0.5rem;
-    margin-bottom: 0.3rem;
-    object-fit: cover;
-    @media screen and (max-width: 600px) {
-      width: 120px;
-      height: 180px;
-    }
-    @media screen and (max-width: 400px) {
-      width: 100px;
-      height: 160px;
-    }
-  }
-
-  p {
-    color: white;
-    font-size: 1rem;
-    font-weight: 400;
-  }
-
-  .overlay {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: rgba(0, 0, 0, 0.5);
-    padding: 0.5rem;
-    color: white;
-    font-weight: bold;
-  }
-`;
-
-
-const FlexWrapper = styled.div`
-  display: flex;
-  gap: 1rem;
-  background: #242235;
-  border-radius: 6px;
-  border: 1px solid #393653;
-  justify-content: center;
-`;
 
 const GenreContainer = styled.div`
   display: flex;
