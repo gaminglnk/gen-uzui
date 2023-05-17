@@ -47,6 +47,7 @@ function MalAnimeDetails() {
     const cachedResponse = localStorage.getItem(`aniRes_${id}`);
     if (cachedResponse) {
       aniRes = JSON.parse(cachedResponse);
+      toast.success("Cache is used.");
     } else {
       aniRes = await axios({
         url: process.env.REACT_APP_BASE_URL,
@@ -65,6 +66,7 @@ function MalAnimeDetails() {
 
       // Cache the response in localStorage
       localStorage.setItem(`aniRes_${id}`, JSON.stringify(aniRes));
+      toast.success("Data is cached.");
     }
 
     setAnilistResponse(aniRes.data.data.Media);
