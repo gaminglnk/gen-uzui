@@ -33,29 +33,65 @@ function MalAnimeDetails() {
   }
 
   async function getInfo() {
-    if (id === "null") {
-      setNotAvailable(true);
-      return;
-    }
-    try {
-    const aniRes = await axios({
-      url: process.env.REACT_APP_BASE_URL,
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      data: {
-        query: searchByIdQuery,
-        variables: {
-          id,
+  if (id === "null") {
+    setNotAvailable(true);
+    return;
+  }
+
+  try {
+    let aniRes;
+
+    // Check if the response is already cached in localStorage
+    const cachedResponse = localStorage.getItem(`aniRes_${id}`);
+    if (cachedResponse) {
+      aniRes = JSON.parse(cachedResponse);
+    } else {
+      aniRes = await axios({
+        url: process.env.REACT_APP_BASE_URL,
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
         },
-      },
-    });
+        data: {
+          query: searchByIdQuery,
+          variables: {
+            id,
+          },
+        },
+      });
+
+      // Cache the response in localStorage
+      localStorage.setItem(`aniRes_${id}`, JSON.stringify(aniRes));
+    }
 
     setAnilistResponse(aniRes.data.data.Media);
     setMal(aniRes.data.data.Media.idMal);
 
+    const cacheSize = Object.values(localStorage)
+      .map((item) => item.length)
+      .reduce((acc, curr) => acc + curr, 0);
+
+    if (cacheSize > CACHE_LIMIT) {
+      const cachedItems = Object.keys(localStorage).filter((key) =>
+        key.startsWith("aniRes_")
+      );
+
+      // Sort cached items by their creation time (timestamp)
+      const sortedItems = cachedItems.sort(
+        (a, b) =>
+          localStorage.getItem(a).timestamp - localStorage.getItem(b).timestamp
+      );
+
+      // Remove older cached items until the cache size is below the limit
+      let size = cacheSize;
+      while (size > CACHE_LIMIT && sortedItems.length > 1) {
+        const itemToRemove = sortedItems.shift();
+        size -= localStorage.getItem(itemToRemove).length;
+        localStorage.removeItem(itemToRemove);
+      }
+    }
+  
     let fetchEpisodes = new META.Anilist();
     let data;
       
