@@ -31,6 +31,8 @@ function MalAnimeDetails() {
   function readMoreHandler() {
     setExpanded(!expanded);
   }
+  
+  const CACHE_LIMIT = 2.5 * 1024 * 1024; // 2.5 MB cache limit
 
   async function getInfo() {
   if (id === "null") {
