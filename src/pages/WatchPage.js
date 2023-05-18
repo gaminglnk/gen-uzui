@@ -107,10 +107,10 @@ function WatchPage() {
       document.title = `${aniRes.data.data.Media.title.userPreferred} EP-${episodeNumber}`;
       setConsumeResponse(metaResponse);
       
-      if (response.data?.subtitles) {
+      const subtitleArray = response.data.subtitles;
+      if (subtitleArray) {
       setVttArray(response.data.subtitles);
         }
-      const subtitleArray = response.data.subtitles;
       var thumbnailSub = subtitleArray.find(
           (previews) => previews.lang === "Thumbnails"
         );
