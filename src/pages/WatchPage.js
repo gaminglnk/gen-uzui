@@ -110,6 +110,7 @@ function WatchPage() {
       if (response.data?.subtitles) {
       setVttArray(response.data.subtitles);
         }
+      const subtitleArray = response.data.subtitles;
       var thumbnailSub = subtitleArray.find(
           (previews) => previews.lang === "Thumbnails"
         );
