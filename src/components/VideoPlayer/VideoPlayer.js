@@ -404,7 +404,7 @@ function VideoPlayer({
             key={index}
             kind="captions"
             label={track.lang}
-            src={track.url}
+            src={`https://cors.zimjs.com/${track.url}`}
             srclang="en"
             default={index === 0}
           />
