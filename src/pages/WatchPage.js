@@ -42,7 +42,7 @@ function WatchPage() {
   const [previousToProp, setPreviousToProp] = useState('');
 
   const [previewThumb, setPreviewThumb] = useState('');
-  const [vttArray, setVttArray] = useState('');
+  const [vttArray, setVttArray] = useState([]);
   
   useEffect(() => {
     getEpisodeLinks();
