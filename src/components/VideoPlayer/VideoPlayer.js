@@ -111,15 +111,7 @@ function VideoPlayer({
       }
 
       if (engVTT) {
-        defaultOptions.tracks = [
-          {
-            kind: 'captions',
-            label: 'English',
-            srclang: 'en',
-            src: engVTT,
-            default: true,
-          },
-        ];
+        document.getElementById("eng-subtitle-place").setAttribute("src", engVTT);
       }
       
       hls.loadSource(src);
@@ -402,7 +394,16 @@ function VideoPlayer({
         style={{
           aspectRatio: 16 / 9,
         }}
-      ></video>
+      >
+        <track
+          id="eng-subtitle-place"
+          kind="captions"
+          label="English lang"
+          src="#"
+          srclang="en"
+          default
+        />
+      </video>
       <BottomFlex></BottomFlex>
     </div>
   );
