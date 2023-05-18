@@ -22,6 +22,8 @@ function VideoPlayer({
   currentEpisode,
   id,
   gogoId,
+  engVTT,
+  previewThumb,
 }) {
   const { width } = useWindowDimensions();
   const navigate = useNavigate();
@@ -100,6 +102,23 @@ function VideoPlayer({
     }
     if (Hls.isSupported()) {
       const hls = new Hls();
+      
+      if (previewThumb) {
+        defaultOptions.previewThumbnails = {
+          enabled: true,
+          src: previewThumb,
+        };
+      }
+
+      if (engVTT) {
+        defaultOptions.captions = {
+          active: true,
+          language: 'en',
+          label: 'English',
+          src: engVTT,
+        };
+      }
+      
       hls.loadSource(src);
       hls.attachMedia(video);
 
