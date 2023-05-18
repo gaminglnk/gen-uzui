@@ -47,6 +47,11 @@ function WatchPage() {
       setEpisodeThumb(animeDetails.bannerImage);
     }
   }, [animeDetails, episodeThumb]);
+  
+  useEffect(() => {
+    if (consumeResponse.length === 0) return;
+    const { previousToProp, nextToProp } = buttonsEpisodeProps();
+  }, [consumeResponse, episode]);
 
   async function getEpisodeLinks() {
     try {
@@ -150,6 +155,28 @@ function WatchPage() {
       document.exitFullscreen();
     }
   }
+  
+  const buttonsEpisodeProps = () => {
+    const currentIndex = consumeResponse.findIndex((item) => getEpisodePrefix(item.id) === getEpisodePrefix(episode));
+    let previousEpisodeId = '';
+    let nextEpisodeId = '';
+
+    if (currentIndex !== -1) {
+      if (currentIndex > 0) {
+        previousEpisodeId = consumeResponse[currentIndex - 1].id;
+      }
+
+      if (currentIndex < consumeResponse.length - 1) {
+        nextEpisodeId = consumeResponse[currentIndex + 1].id;
+      }
+    }
+
+    const previousToProp = previousEpisodeId ? `/watch/${id}/${previousEpisodeId}` : '';
+    const nextToProp = nextEpisodeId ? `/watch/${id}/${nextEpisodeId}` : '';
+
+    return { previousToProp, nextToProp };
+  };
+
 
   function updateLocalStorage(enumId, episode, malId, gogoId) {
     if (localStorage.getItem("Watching")) {
@@ -358,6 +385,80 @@ function WatchPage() {
                       </IframeWrapper>
                     </div>
                   )}
+                  <EpisodeButtons>
+                    {width <= 600 && parseInt(episodeNumber) - 1 > 0 && (
+                      <IconContext.Provider
+                        value={{
+                          size: "1.8rem",
+                          style: {
+                            verticalAlign: "middle",
+                          },
+                        }}
+                      >
+                        <EpisodeLinks
+                          to={previousToProp}
+                        >
+                          <HiArrowSmLeft />
+                        </EpisodeLinks>
+                      </IconContext.Provider>
+                    )}
+                    {width > 600 && parseInt(episodeNumber) - 1 > 0 && (
+                      <IconContext.Provider
+                        value={{
+                          size: "1.3rem",
+                          style: {
+                            verticalAlign: "middle",
+                            marginBottom: "0.2rem",
+                            marginRight: "0.3rem",
+                          },
+                        }}
+                      >
+                        <EpisodeLinks
+                          to={previousToProp}
+                        >
+                          <HiArrowSmLeft />
+                          Previous
+                        </EpisodeLinks>
+                      </IconContext.Provider>
+                    )}
+                    {width <= 600 &&
+                      parseInt(episodeNumber) + 1 <= animeDetails.episodes && (
+                        <IconContext.Provider
+                          value={{
+                            size: "1.8rem",
+                            style: {
+                              verticalAlign: "middle",
+                            },
+                          }}
+                        >
+                          <EpisodeLinks
+                            to={nextToProp}
+                          >
+                            <HiArrowSmRight />
+                          </EpisodeLinks>
+                        </IconContext.Provider>
+                      )}
+                    {width > 600 &&
+                      parseInt(episodeNumber) + 1 <= animeDetails.episodes && (
+                        <IconContext.Provider
+                          value={{
+                            size: "1.3rem",
+                            style: {
+                              verticalAlign: "middle",
+                              marginBottom: "0.2rem",
+                              marginLeft: "0.3rem",
+                            },
+                          }}
+                        >
+                          <EpisodeLinks
+                            to={nextToProp}
+                          >
+                            Next
+                            <HiArrowSmRight />
+                          </EpisodeLinks>
+                        </IconContext.Provider>
+                      )}
+                  </EpisodeButtons>
                 </div>
                 <EpisodesWrapper>
                   <span style={{ textAlign: 'left', marginBottom: '0.35rem' }}>Episodes »</span>
