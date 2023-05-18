@@ -42,7 +42,7 @@ function WatchPage() {
   const [previousToProp, setPreviousToProp] = useState('');
 
   const [previewThumb, setPreviewThumb] = useState('');
-  const [engVTT, setEngVTT] = useState('');
+  const [vttArray, setVttArray] = useState('');
   
   useEffect(() => {
     getEpisodeLinks();
@@ -108,12 +108,7 @@ function WatchPage() {
       setConsumeResponse(metaResponse);
       
       const subtitleArray = response.data.subtitles;
-      var englishSub = subtitleArray.find(
-          (previews) => previews.lang === "English"
-        );
-        if (englishSub && englishSub.url) {
-          setEngVTT(corsProxy + englishSub.url);
-      }
+      setVttArray(subtitleArray);
       var thumbnailSub = subtitleArray.find(
           (previews) => previews.lang === "Thumbnails"
         );
@@ -340,7 +335,7 @@ function WatchPage() {
                       totalEpisodes={animeDetails.episodes}
                       id={id}
                       previewThumb={previewThumb}
-                      engVTT={engVTT}
+                      vttArray={vttArray}
                     />
                   )}
                   {!internalPlayer && (
