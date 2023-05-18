@@ -102,7 +102,7 @@ function WatchPage() {
       setConsumeResponse(metaResponse);
       setLoading(false);
       
-      const matchedEpisode = metaResponse.find(item => item.id === id);
+      const matchedEpisode = metaResponse.find(item => item.id === episode);
       if (matchedEpisode) {
         setEpisodeNumber(matchedEpisode.number);
       }
