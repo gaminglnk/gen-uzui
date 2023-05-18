@@ -41,6 +41,9 @@ function WatchPage() {
   const [nextToProp, setNextToProp] = useState('');
   const [previousToProp, setPreviousToProp] = useState('');
 
+  const [previewThumb, setPreviewThumb] = useState('');
+  const [engVTT, setEngVTT] = useState('');
+  
   useEffect(() => {
     getEpisodeLinks();
   }, [episode]);
@@ -159,6 +162,21 @@ function WatchPage() {
       if (!episodeThumb && animeDetails && animeDetails.bannerImage) {
         setEpisodeThumb(aniRes.data.data.Media.bannerImage);
       }
+      
+      const subtitleArray = response.data.subtitles;
+      var englishSub = subtitleArray.find(
+          (previews) => previews.lang === "English"
+        );
+        if (englishSub && englishSub.url) {
+          setEngVTT(corsProxy + englishSub.url);
+      }
+      var thumbnailSub = subtitleArray.find(
+          (previews) => previews.lang === "Thumbnails"
+        );
+        if (thumbnailSub && thumbnailSub.url) {
+          setPreviewThumb(corsProxy + thumbnailSub.url);
+      }
+      
     } catch (error) {
       console.error("Error occurred:", error);
       setLoading(false);
@@ -320,6 +338,8 @@ function WatchPage() {
                       banner={episodeThumb}
                       totalEpisodes={animeDetails.episodes}
                       id={id}
+                      previewThumb={previewThumb}
+                      engVTT={engVTT}
                     />
                   )}
                   {!internalPlayer && (
