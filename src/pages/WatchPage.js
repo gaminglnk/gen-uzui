@@ -82,7 +82,7 @@ function WatchPage() {
       
       let metaResponse = fallbackRes.data;
      
-      setEpisodeLinks((`https://www.speedynet.eu.org/apps/spark?link=${corsProxy}${response.data.sources[0]}`);
+      setEpisodeLinks(`https://www.speedynet.eu.org/apps/spark?link=${corsProxy}${response.data.sources[0]}`);
       setCurrentServer(`https://www.speedynet.eu.org/apps/spark?link=${corsProxy}${response.data.sources[0]}`);
 
       const sourcesArray = response.data.sources;
