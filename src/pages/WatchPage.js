@@ -38,8 +38,8 @@ function WatchPage() {
   const [notAvailable, setNotAvailable] = useState(false);
   const [internalPlayer, setInternalPlayer] = useState(true);
   
-  const [nextToProp, setNextToProp] = useState();
-  const [previousToProp, setPreviousToProp] = useState();
+  const [nextToProp, setNextToProp] = useState('');
+  const [previousToProp, setPreviousToProp] = useState('');
 
   useEffect(() => {
     getEpisodeLinks();
@@ -51,13 +51,6 @@ function WatchPage() {
     }
   }, [animeDetails, episodeThumb]);
   
-  useEffect(() => {
-    if (consumeResponse.length === 0) return;
-    const { previousToProp, nextToProp } = buttonsEpisodeProps();
-    setNextToProp(nextToProp);
-    setPreviousToProp(previousToProp);
-  }, [consumeResponse, episode]);
-
   async function getEpisodeLinks() {
     try {
       setLoading(true);
@@ -121,12 +114,38 @@ function WatchPage() {
           break;
         }
       }
-
       if (matchedEpisode) {
         setEpisodeNumber(matchedEpisode.number);
       } else {
         setEpisodeNumber(undefined);
       }
+      
+      const buttonsEpisodeProps = () => {
+    const currentIndex = metaResponse.findIndex((item) => getEpisodePrefix(item.id) === getEpisodePrefix(episode));
+    let previousEpisodeId = '';
+    let nextEpisodeId = '';
+
+    if (currentIndex !== -1) {
+      if (currentIndex > 0) {
+        previousEpisodeId = metaResponse[currentIndex - 1].id;
+      }
+
+      if (currentIndex < metaResponse.length - 1) {
+        nextEpisodeId = metaResponse[currentIndex + 1].id;
+      }
+    }
+
+    const previousToProp = previousEpisodeId ? `/watch/${id}/${previousEpisodeId}` : '';
+    const nextToProp = nextEpisodeId ? `/watch/${id}/${nextEpisodeId}` : '';
+
+    return { previousToProp, nextToProp };
+  };
+
+  const { previousToProp, nextToProp } = buttonsEpisodeProps();
+  if (metaResponse.length !== 0) {
+    setNextToProp(nextToProp);
+    setPreviousToProp(previousToProp);
+  }
       
       if (metaResponse && metaResponse.length > 0) {
         const matchingObject = metaResponse.find(
@@ -160,28 +179,6 @@ function WatchPage() {
       document.exitFullscreen();
     }
   }
-  
-  const buttonsEpisodeProps = () => {
-    const currentIndex = consumeResponse.findIndex((item) => getEpisodePrefix(item.id) === getEpisodePrefix(episode));
-    let previousEpisodeId = '';
-    let nextEpisodeId = '';
-
-    if (currentIndex !== -1) {
-      if (currentIndex > 0) {
-        previousEpisodeId = consumeResponse[currentIndex - 1].id;
-      }
-
-      if (currentIndex < consumeResponse.length - 1) {
-        nextEpisodeId = consumeResponse[currentIndex + 1].id;
-      }
-    }
-
-    const previousToProp = previousEpisodeId ? `/watch/${id}/${previousEpisodeId}` : '';
-    const nextToProp = nextEpisodeId ? `/watch/${id}/${nextEpisodeId}` : '';
-
-    return { previousToProp, nextToProp };
-  };
-
 
   function updateLocalStorage(enumId, episode, malId, gogoId) {
     if (localStorage.getItem("Watching")) {
