@@ -22,7 +22,7 @@ function VideoPlayer({
   currentEpisode,
   id,
   gogoId,
-  engVTT,
+  vttArray,
   previewThumb,
 }) {
   const { width } = useWindowDimensions();
@@ -33,7 +33,8 @@ function VideoPlayer({
   let src = sources;
   const [player, setPlayer] = useState(null);
   const [autoPlay, setAutoplay] = useState(false);
-
+  const [filterVtt, setFilterVtt] = useState('');
+  
   function skipIntro() {
     player.forward(85);
   }
@@ -45,7 +46,13 @@ function VideoPlayer({
     localStorage.setItem("autoplay", data);
     setAutoplay(data);
   }
-
+  
+  let filteredSubArray = [];
+  if (vttArray && Array.isArray(vttArray)) {
+    filteredSubArray = vttArray.filter((item) => item.lang !== 'Thumbnails');
+    setFilterVtt(filteredSubArray);
+  }
+  
   useEffect(() => {
     if (!localStorage.getItem("autoplay")) {
       localStorage.setItem("autoplay", false);
@@ -108,10 +115,6 @@ function VideoPlayer({
           enabled: true,
           src: previewThumb,
         };
-      }
-
-      if (engVTT) {
-        document.getElementById("eng-subtitle-place").setAttribute("src", engVTT);
       }
       
       hls.loadSource(src);
@@ -395,14 +398,17 @@ function VideoPlayer({
           aspectRatio: 16 / 9,
         }}
       >
-        <track
-          id="eng-subtitle-place"
-          kind="captions"
-          label="English lang"
-          src="#"
-          srclang="en"
-          default
-        />
+        {filterVtt &&
+        filterVtt.map((track, index) => (
+          <track
+            key={index}
+            kind="captions"
+            label={track.lang}
+            src={track.url}
+            srclang="en"
+            default={index === 0}
+          />
+        ))}
       </video>
       <BottomFlex></BottomFlex>
     </div>
