@@ -54,7 +54,7 @@ function WatchPage() {
       window.scrollTo(0, 0);
 
       const responsePromise = axios.get(
-        `${process.env.REACT_APP_BACK_URL}/anime/gogoanime/watch/${episode}`
+        `${process.env.REACT_APP_BACK_URL}/anime/zoro/watch?episodeId=${episode}`
       );
 
       const aniResPromise = axios({
@@ -72,30 +72,22 @@ function WatchPage() {
         },
       });
 
-      const consumeResponsePromise = new META.Anilist().fetchEpisodesListById(id);
-
-      const [response, aniRes] = await Promise.all([
+      const fallbackPromise = axios.get(`${process.env.REACT_APP_BACK_URL}/meta/anilist/episodes/${id}?provider=zoro`);
+      
+      const [response, aniRes, fallbackRes] = await Promise.all([
         responsePromise,
         aniResPromise,
+        fallbackPromise,
       ]);
       
-      let metaResponse;
-      try {
-        metaResponse = await consumeResponsePromise;
-      } catch (error) {
-        console.error("consumeResponsePromise error:", error);
-        toast.error("Retrieval failed, using fallback.", {duration: 3000});
-
-        const fallbackRes = await axios.get(`${process.env.REACT_APP_BACK_URL}/meta/anilist/episodes/${id}`);
-        metaResponse = fallbackRes.data;
-      }
-
+      let metaResponse = fallbackRes.data;
+     
       setEpisodeLinks(response.data);
-      setCurrentServer(response.data.headers.Referer);
+      setCurrentServer(`https://www.speedynet.eu.org/apps/spark?link=${corsProxy}${response.data.sources[0]}`);
 
       const sourcesArray = response.data.sources;
       const defaultQualityObj = sourcesArray.find(
-        (source) => source.quality === "default"
+        (source) => source.quality === "auto"
       );
 
       if (defaultQualityObj) {
@@ -104,12 +96,6 @@ function WatchPage() {
       } else {
         setInternalPlayer(true);
       }
-
-      const episodeNumber = episode.match(/episode-(\d+)/i)[1];
-      setEpisodeNumber(episodeNumber);
-      const gogoId = episode.match(/^(.*?)(?:-episode-\d+)?$/i)[1];
-      setGogoId(gogoId);
-      updateLocalStorage(episodeNumber, episode, id, gogoId);
 
       setAnimeDetails(aniRes.data.data.Media);
       document.title = `${aniRes.data.data.Media.title.userPreferred} EP-${episodeNumber}`;
@@ -283,9 +269,7 @@ function WatchPage() {
                       title={`(${id}) - EP${episodeNumber}`}
                       banner={episodeThumb}
                       totalEpisodes={animeDetails.episodes}
-                      currentEpisode={episodeNumber}
                       id={id}
-                      gogoId={gogoId}
                     />
                   )}
                   {!internalPlayer && (
@@ -353,88 +337,6 @@ function WatchPage() {
                       </IframeWrapper>
                     </div>
                   )}
-                  <EpisodeButtons>
-                    {width <= 600 && parseInt(episodeNumber) - 1 > 0 && (
-                      <IconContext.Provider
-                        value={{
-                          size: "1.8rem",
-                          style: {
-                            verticalAlign: "middle",
-                          },
-                        }}
-                      >
-                        <EpisodeLinks
-                          to={`/watch/${id}/${gogoId}-episode-${
-                            parseInt(episodeNumber) - 1
-                          }`}
-                        >
-                          <HiArrowSmLeft />
-                        </EpisodeLinks>
-                      </IconContext.Provider>
-                    )}
-                    {width > 600 && parseInt(episodeNumber) - 1 > 0 && (
-                      <IconContext.Provider
-                        value={{
-                          size: "1.3rem",
-                          style: {
-                            verticalAlign: "middle",
-                            marginBottom: "0.2rem",
-                            marginRight: "0.3rem",
-                          },
-                        }}
-                      >
-                        <EpisodeLinks
-                          to={`/watch/${id}/${gogoId}-episode-${
-                            parseInt(episodeNumber) - 1
-                          }`}
-                        >
-                          <HiArrowSmLeft />
-                          Previous
-                        </EpisodeLinks>
-                      </IconContext.Provider>
-                    )}
-                    {width <= 600 &&
-                      parseInt(episodeNumber) + 1 <= animeDetails.episodes && (
-                        <IconContext.Provider
-                          value={{
-                            size: "1.8rem",
-                            style: {
-                              verticalAlign: "middle",
-                            },
-                          }}
-                        >
-                          <EpisodeLinks
-                            to={`/watch/${id}/${gogoId}-episode-${
-                              parseInt(episodeNumber) + 1
-                            }`}
-                          >
-                            <HiArrowSmRight />
-                          </EpisodeLinks>
-                        </IconContext.Provider>
-                      )}
-                    {width > 600 &&
-                      parseInt(episodeNumber) + 1 <= animeDetails.episodes && (
-                        <IconContext.Provider
-                          value={{
-                            size: "1.3rem",
-                            style: {
-                              verticalAlign: "middle",
-                              marginBottom: "0.2rem",
-                              marginLeft: "0.3rem",
-                            },
-                          }}
-                        >
-                          <EpisodeLinks
-                            to={`/watch/${id}/${gogoId}-episode-${
-                              parseInt(episodeNumber) + 1
-                            }`}
-                          >
-                            Next
-                            <HiArrowSmRight />
-                          </EpisodeLinks>
-                        </IconContext.Provider>
-                      )}
-                  </EpisodeButtons>
                 </div>
                 <EpisodesWrapper>
                   <span style={{ textAlign: 'left', marginBottom: '0.35rem' }}>Episodes »</span>
