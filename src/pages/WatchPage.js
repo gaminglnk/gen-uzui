@@ -102,11 +102,22 @@ function WatchPage() {
       setConsumeResponse(metaResponse);
       setLoading(false);
       
-      const matchedEpisode = metaResponse.find(item => item.id === episode);
-      if (matchedEpisode) {
-        setEpisodeNumber(matchedEpisode.number);
+      let matchedEpisode = null;
+      const episodePrefix = getEpisodePrefix(episode);
+      for (const item of metaResponse) {
+        const idPrefix = getEpisodePrefix(item.id);
+        if (episodePrefix === idPrefix) {
+          matchedEpisode = item;
+          break;
+        }
       }
 
+      if (matchedEpisode) {
+        setEpisodeNumber(matchedEpisode.number);
+      } else {
+        setEpisodeNumber(undefined);
+      }
+      
       if (metaResponse && metaResponse.length > 0) {
         const matchingObject = metaResponse.find(
           (obj) => obj.id === episode
@@ -126,6 +137,7 @@ function WatchPage() {
       toast.error("An error occurred while fetching episode links.");
     }
   }
+  
 
   function fullScreenHandler(e) {
     setFullScreen(!fullScreen);
@@ -166,6 +178,11 @@ function WatchPage() {
     }
   }
   
+  const getEpisodePrefix = (episode) => {
+    const lastIndexOfDollar = episode.lastIndexOf('$');
+    return episode.substring(0, lastIndexOfDollar);
+  };
+  
   const groupSize = consumeResponse?.length <= 80 ? consumeResponse?.length : 70;
   const totalGroups = Math.ceil((consumeResponse?.length ?? 0) / groupSize);
   const visibleButtons = showAllButtons
@@ -186,7 +203,6 @@ function WatchPage() {
     }
     return buttons;
   };
-
 
   return (
     <div>
