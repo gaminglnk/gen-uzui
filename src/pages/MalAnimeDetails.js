@@ -58,17 +58,17 @@ function MalAnimeDetails() {
       
     let data;
     try {
-      data = await axios.get(`${process.env.REACT_APP_BACK_URL}/meta/anilist/episodes/${id}?provider=zoro`);
-      let data = fallbackRes.data;
+      let primeData = await axios.get(`${process.env.REACT_APP_BACK_URL}/meta/anilist/episodes/${id}?provider=zoro`);
+      data = primeData.data;
     } catch (error) {
       console.log(error);
-      }
       toast.error('Retrying zoro fallback...', {
         duration: 3000,
       });
       const fallbackRes = await axios.get(`${process.env.REACT_APP_BACK_URL}/meta/anilist/episodes/${id}`);
       data = fallbackRes.data;
     }
+
     
     if (data.length === 0) {
       setNotAvailable(true);
