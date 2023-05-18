@@ -87,8 +87,6 @@ function WatchPage() {
       ]);
       
       let metaResponse = fallbackRes.data;
-     
-      setEpisodeLinks(`https://www.speedynet.eu.org/apps/spark?link=${corsProxy}${response.data.sources[0].url}`);
       setCurrentServer(`https://www.speedynet.eu.org/apps/spark?link=${corsProxy}${response.data.sources[0].url}`);
 
       const sourcesArray = response.data.sources;
@@ -99,6 +97,8 @@ function WatchPage() {
       if (defaultQualityObj) {
         const defaultQualitySource = corsProxy + defaultQualityObj.url;
         setEpisodeSource(defaultQualitySource);
+        setEpisodeLinks(defaultQualityObj.url);
+        
       } else {
         setInternalPlayer(true);
       }
