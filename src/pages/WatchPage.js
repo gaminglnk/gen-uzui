@@ -37,6 +37,9 @@ function WatchPage() {
   const [fullScreen, setFullScreen] = useState(false);
   const [notAvailable, setNotAvailable] = useState(false);
   const [internalPlayer, setInternalPlayer] = useState(true);
+  
+  const [nextToProp, setNextToProp] = useState();
+  const [previousToProp, setPreviousToProp] = useState();
 
   useEffect(() => {
     getEpisodeLinks();
@@ -51,6 +54,8 @@ function WatchPage() {
   useEffect(() => {
     if (consumeResponse.length === 0) return;
     const { previousToProp, nextToProp } = buttonsEpisodeProps();
+    setNextToProp(nextToProp);
+    setPreviousToProp(previousToProp);
   }, [consumeResponse, episode]);
 
   async function getEpisodeLinks() {
