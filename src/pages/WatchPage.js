@@ -106,6 +106,21 @@ function WatchPage() {
       setAnimeDetails(aniRes.data.data.Media);
       document.title = `${aniRes.data.data.Media.title.userPreferred} EP-${episodeNumber}`;
       setConsumeResponse(metaResponse);
+      
+      const subtitleArray = response.data.subtitles;
+      var englishSub = subtitleArray.find(
+          (previews) => previews.lang === "English"
+        );
+        if (englishSub && englishSub.url) {
+          setEngVTT(corsProxy + englishSub.url);
+      }
+      var thumbnailSub = subtitleArray.find(
+          (previews) => previews.lang === "Thumbnails"
+        );
+        if (thumbnailSub && thumbnailSub.url) {
+          setPreviewThumb(corsProxy + thumbnailSub.url);
+      }
+      
       setLoading(false);
       
       let matchedEpisode = null;
@@ -161,20 +176,6 @@ function WatchPage() {
       }
       if (!episodeThumb && animeDetails && animeDetails.bannerImage) {
         setEpisodeThumb(aniRes.data.data.Media.bannerImage);
-      }
-      
-      const subtitleArray = response.data.subtitles;
-      var englishSub = subtitleArray.find(
-          (previews) => previews.lang === "English"
-        );
-        if (englishSub && englishSub.url) {
-          setEngVTT(corsProxy + englishSub.url);
-      }
-      var thumbnailSub = subtitleArray.find(
-          (previews) => previews.lang === "Thumbnails"
-        );
-        if (thumbnailSub && thumbnailSub.url) {
-          setPreviewThumb(corsProxy + thumbnailSub.url);
       }
       
     } catch (error) {
