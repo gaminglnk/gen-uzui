@@ -82,7 +82,7 @@ function WatchPage() {
       
       let metaResponse = fallbackRes.data;
      
-      setEpisodeLinks(response.data);
+      setEpisodeLinks((`https://www.speedynet.eu.org/apps/spark?link=${corsProxy}${response.data.sources[0]}`);
       setCurrentServer(`https://www.speedynet.eu.org/apps/spark?link=${corsProxy}${response.data.sources[0]}`);
 
       const sourcesArray = response.data.sources;
@@ -101,6 +101,11 @@ function WatchPage() {
       document.title = `${aniRes.data.data.Media.title.userPreferred} EP-${episodeNumber}`;
       setConsumeResponse(metaResponse);
       setLoading(false);
+      
+      const matchedEpisode = metaResponse.find(item => item.id === id);
+      if (matchedEpisode) {
+        setEpisodeNumber(matchedEpisode.number);
+      }
 
       if (metaResponse && metaResponse.length > 0) {
         const matchingObject = metaResponse.find(
@@ -216,7 +221,7 @@ function WatchPage() {
                       }}
                     >
                       <a
-                        href={episodeLinks.download}
+                        href={episodeLinks}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
@@ -236,7 +241,7 @@ function WatchPage() {
                       }}
                     >
                       <a
-                        href={episodeLinks.download}
+                        href={episodeLinks}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
