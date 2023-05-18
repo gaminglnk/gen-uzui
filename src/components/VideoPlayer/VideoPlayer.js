@@ -33,7 +33,7 @@ function VideoPlayer({
   let src = sources;
   const [player, setPlayer] = useState(null);
   const [autoPlay, setAutoplay] = useState(false);
-  const [filterVtt, setFilterVtt] = useState('');
+  const [filterVtt, setFilterVtt] = useState([]);
   
   function skipIntro() {
     player.forward(85);
