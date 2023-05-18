@@ -111,12 +111,15 @@ function VideoPlayer({
       }
 
       if (engVTT) {
-        defaultOptions.captions = {
-          active: true,
-          language: 'en',
-          label: 'English',
-          src: engVTT,
-        };
+        defaultOptions.tracks = [
+          {
+            kind: 'captions',
+            label: 'English',
+            srclang: 'en',
+            src: engVTT,
+            default: true,
+          },
+        ];
       }
       
       hls.loadSource(src);
