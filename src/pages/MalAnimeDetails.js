@@ -55,22 +55,21 @@ function MalAnimeDetails() {
 
     setAnilistResponse(aniRes.data.data.Media);
     setMal(aniRes.data.data.Media.idMal);
-
-    let fetchEpisodes = new META.Anilist();
-    let data;
       
+    let data;
     try {
-      data = await fetchEpisodes.fetchEpisodesListById(id);
+      data = await axios.get(`${process.env.REACT_APP_BACK_URL}/meta/anilist/episodes/${id}?provider=zoro`);
+      let data = fallbackRes.data;
     } catch (error) {
       console.log(error);
-      toast.error('Error occured, using fallback...', {
+      }
+      toast.error('Retrying zoro fallback...', {
         duration: 3000,
       });
-
       const fallbackRes = await axios.get(`${process.env.REACT_APP_BACK_URL}/meta/anilist/episodes/${id}`);
       data = fallbackRes.data;
     }
-      
+    
     if (data.length === 0) {
       setNotAvailable(true);
     } else {
