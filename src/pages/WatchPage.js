@@ -87,8 +87,7 @@ function WatchPage() {
       ]);
       
       let metaResponse = fallbackRes.data;
-      setCurrentServer(`https://www.speedynet.eu.org/apps/spark?link=${corsProxy}${response.data.sources[0].url}`);
-
+      
       const sourcesArray = response.data.sources;
       const defaultQualityObj = sourcesArray.find(
         (source) => source.quality === "auto"
@@ -98,7 +97,8 @@ function WatchPage() {
         const defaultQualitySource = corsProxy + defaultQualityObj.url;
         setEpisodeSource(defaultQualitySource);
         setEpisodeLinks(defaultQualityObj.url);
-        
+        setCurrentServer(`https://www.speedynet.eu.org/apps/spark?link=${corsProxy}${defaultQualityObj.url}`);
+
       } else {
         setInternalPlayer(true);
       }
@@ -136,31 +136,30 @@ function WatchPage() {
       }
       
       const buttonsEpisodeProps = () => {
-    const currentIndex = metaResponse.findIndex((item) => getEpisodePrefix(item.id) === getEpisodePrefix(episode));
-    let previousEpisodeId = '';
-    let nextEpisodeId = '';
+        const currentIndex = metaResponse.findIndex((item) => getEpisodePrefix(item.id) === getEpisodePrefix(episode));
+        let previousEpisodeId = '';
+        let nextEpisodeId = '';
 
-    if (currentIndex !== -1) {
-      if (currentIndex > 0) {
-        previousEpisodeId = metaResponse[currentIndex - 1].id;
+        if (currentIndex !== -1) {
+          if (currentIndex > 0) {
+            previousEpisodeId = metaResponse[currentIndex - 1].id;
+          }
+
+          if (currentIndex < metaResponse.length - 1) {
+            nextEpisodeId = metaResponse[currentIndex + 1].id;
+          }
+        }
+
+        const previousToProp = previousEpisodeId ? `/watch/${id}/${previousEpisodeId}` : '';
+        const nextToProp = nextEpisodeId ? `/watch/${id}/${nextEpisodeId}` : '';
+
+        return { previousToProp, nextToProp };
+      };
+      const { previousToProp, nextToProp } = buttonsEpisodeProps();
+      if (metaResponse.length !== 0) {
+        setNextToProp(nextToProp);
+        setPreviousToProp(previousToProp);
       }
-
-      if (currentIndex < metaResponse.length - 1) {
-        nextEpisodeId = metaResponse[currentIndex + 1].id;
-      }
-    }
-
-    const previousToProp = previousEpisodeId ? `/watch/${id}/${previousEpisodeId}` : '';
-    const nextToProp = nextEpisodeId ? `/watch/${id}/${nextEpisodeId}` : '';
-
-    return { previousToProp, nextToProp };
-  };
-
-  const { previousToProp, nextToProp } = buttonsEpisodeProps();
-  if (metaResponse.length !== 0) {
-    setNextToProp(nextToProp);
-    setPreviousToProp(previousToProp);
-  }
       
       if (metaResponse && metaResponse.length > 0) {
         const matchingObject = metaResponse.find(
@@ -385,24 +384,6 @@ function WatchPage() {
                           marginheight="0"
                           scrolling="no"
                         ></iframe>
-                        {width <= 600 && (
-                          <div>
-                            <IconContext.Provider
-                              value={{
-                                size: "1.8rem",
-                                color: "white",
-                                style: {
-                                  verticalAlign: "middle",
-                                  cursor: "pointer",
-                                },
-                              }}
-                            >
-                              <BiFullscreen
-                                onClick={(e) => fullScreenHandler(e)}
-                              />
-                            </IconContext.Provider>
-                          </div>
-                        )}
                       </IframeWrapper>
                     </div>
                   )}
