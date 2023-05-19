@@ -750,10 +750,8 @@ const IframeWrapper = styled.div`
   }
 
   @media screen and (max-width: 600px) {
-    padding-bottom: 0; /* Remove the padding-bottom for small screens */
-    height: auto; /* Set the height to auto for small screens */
-    max-width: 100%; /* Ensure the wrapper doesn't exceed the available width */
-    background-size: 13rem; /* Adjust the background-size property as needed */
+    padding-bottom: 66.3%;
+    background-size: 13rem;
   }
 `;
 
