@@ -795,7 +795,8 @@ const IframeWrapper = styled.div`
   }
 
   @media screen and (max-width: 600px) {
-    padding-top: 66.3%;
+    padding-bottom: 66.3%;
+    line-height: 0;
     background-size: 13rem; /* Adjust the background-size property as needed */
   }
 `;
