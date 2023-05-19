@@ -338,6 +338,7 @@ function WatchPage() {
                       id={id}
                       previewThumb={previewThumb}
                       vttArray={vttArray}
+                      nextEpisode={nextToProp}
                     />
                   )}
                   {!internalPlayer && (
