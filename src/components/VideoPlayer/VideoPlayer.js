@@ -47,11 +47,13 @@ function VideoPlayer({
     setAutoplay(data);
   }
   
-  let filteredSubArray = [];
-  if (vttArray && Array.isArray(vttArray)) {
-    filteredSubArray = vttArray.filter((item) => item.lang !== 'Thumbnails');
+  useEffect(() => {
+    let filteredSubArray = [];
+    if (vttArray && Array.isArray(vttArray)) {
+      filteredSubArray = vttArray.filter((item) => item.lang !== 'Thumbnails');
+    }
     setFilterVtt(filteredSubArray);
-  }
+  }, [vttArray]);
   
   useEffect(() => {
     if (!localStorage.getItem("autoplay")) {
@@ -405,7 +407,7 @@ function VideoPlayer({
             kind="captions"
             label={track.lang}
             src={`https://cors.zimjs.com/${track.url}`}
-            srclang="en"
+            srclang={track.lang.substring(0, 2).toLowerCase()}
             default={index === 0}
           />
         ))}
