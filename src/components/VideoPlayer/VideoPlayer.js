@@ -24,6 +24,7 @@ function VideoPlayer({
   gogoId,
   vttArray,
   previewThumb,
+  nextEpisode,
 }) {
   const { width } = useWindowDimensions();
   const navigate = useNavigate();
@@ -215,9 +216,7 @@ function VideoPlayer({
             localStorage.getItem("autoplay") === "true" &&
             parseInt(currentEpisode) !== parseInt(totalEpisodes)
           ) {
-            navigate(
-              `/watch/${id}/${gogoId}-episode-${parseInt(currentEpisode) + 1}`
-            );
+            navigate(nextEpisode);
           }
         });
 
