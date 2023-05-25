@@ -76,7 +76,7 @@ function MalAnimeDetails() {
       const filteredData = data.filter((episode) => episode.number !== 0);
       const targetIndex = data.findIndex((episode) => episode.number === 1);
 
-      if (targetIndex === data.length - 1) {
+      if (targetIndex === filteredData.length - 1) {
         // If the object with number 1 is located at the last index
         setConsumeResponse(filteredData.reverse());
       } else if (targetIndex === 0) {
