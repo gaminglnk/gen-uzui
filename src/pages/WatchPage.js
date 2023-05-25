@@ -105,7 +105,24 @@ function WatchPage() {
 
       setAnimeDetails(aniRes.data.data.Media);
       document.title = `${aniRes.data.data.Media.title.userPreferred} EP-${episodeNumber}`;
-      setConsumeResponse(metaResponse);
+      
+      if (metaResponse.length === 0) {
+        setNotAvailable(true);
+      } else {
+        const filteredData = metaResponse.filter((episode) => episode.number !== 0);
+        const targetIndex = filteredData.findIndex((episode) => episode.number === 1);
+
+        if (targetIndex === filteredData.length - 1) {
+         // If the object with number 1 is located at the last index
+         setConsumeResponse(filteredData.reverse());
+        } else if (targetIndex === 0) {
+          // If the object with number 1 is located at the top index
+          setConsumeResponse(filteredData);
+        } else {
+          setConsumeResponse(filteredData);
+        }
+      }
+
       
       const subtitleArray = response.data.subtitles;
       if (subtitleArray) {
