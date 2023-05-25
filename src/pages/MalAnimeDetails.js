@@ -74,8 +74,19 @@ function MalAnimeDetails() {
       setNotAvailable(true);
     } else {
       const filteredData = data.filter((episode) => episode.number !== 0);
-      setConsumeResponse(filteredData);
+      const targetIndex = data.findIndex((episode) => episode.number === 1);
+
+      if (targetIndex === data.length - 1) {
+        // If the object with number 1 is located at the last index
+        setConsumeResponse(filteredData.reverse());
+      } else if (targetIndex === 0) {
+        // If the object with number 1 is located at the top index
+        setConsumeResponse(filteredData);
+       } else {
+       setConsumeResponse(filteredData);
+      }
     }
+
 
     console.log('Meta response (for devs):', data);
   } catch (err) {
