@@ -3,8 +3,6 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 const FooterContainer = styled.div`
-  background-color: #0c0d10;
-  color: #dbdcdd;
   padding: 2rem;
   display: flex;
   flex-direction: column;
@@ -21,7 +19,6 @@ const LogoText = styled.h1`
 const Description = styled.p`
   font-family: "Lexend", sans-serif;
   font-size: 0.9rem;
-  color: #9c9c9c;
   margin-bottom: 2rem;
 `;
 
@@ -37,7 +34,6 @@ const FootLinks = styled.div`
 `;
 
 const FootLink = styled(Link)`
-  color: #a7a7a7;
   text-decoration: none;
   transition: color 0.3s ease-in-out;
 
