@@ -59,7 +59,7 @@ const Footer = () => {
         <FootLink to="/movies/1">Movies</FootLink>
         <FootLink to="/trending/1">Latest Shows</FootLink>
         <FootLink to="/dmca">DMCA</FootLink>
-        <FootLink href="https://github.com/gaminglnk/">Github</FootLink>
+        <FootLink to="https://github.com/gaminglnk/">Github</FootLink>
       </FootLinks>
       <Description>
         This site does not store any files on our server, we only link to the
