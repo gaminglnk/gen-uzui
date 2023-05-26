@@ -44,6 +44,7 @@ const FootLink = styled(Link)`
 
 const Footer = () => {
   return (
+    <>
     <div style={{ height: "1px", backgroundColor: "#393653", borderRadius: "2px", margin: "1.5rem 0", }} ></div>
     <FooterContainer>
       <LogoText>kimitsu</LogoText>
@@ -63,6 +64,7 @@ const Footer = () => {
         media which is hosted on 3rd party services.
       </Description>
     </FooterContainer>
+  </>
   );
 };
 
