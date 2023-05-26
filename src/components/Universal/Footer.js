@@ -1,58 +1,44 @@
-import { useState } from "react";
-import styled from "styled-components";
 import { Link } from "react-router-dom";
+import styled from "styled-components";
 
-const FooterContainer = styled.section`
-  color: #dbdcdd;
+const FooterContainer = styled.footer`
   background-color: #0c0d10;
+  color: #dbdcdd;
+  padding: 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  height: 12rem;
+  text-align: center;
 
-  @media (min-width: 1024px) {
+  @media (min-width: 600px) {
+    padding: 2rem 5rem;
     flex-direction: row;
-    align-items: center;
-  }
-`;
-
-const ContentContainer = styled.div`
-  width: 80%;
-  margin: 0 auto;
-
-  @media (min-width: 1024px) {
-    width: 95%;
-  }
-
-  @media (min-width: 1280px) {
-    width: 80%;
+    justify-content: space-between;
+    align-items: flex-start;
   }
 `;
 
 const LogoContainer = styled.div`
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 0.5rem;
 
-  @media (min-width: 1024px) {
-    gap: 10px;
+  @media (min-width: 600px) {
+    gap: 1rem;
   }
 `;
 
 const LogoText = styled.h1`
   font-family: 'Lexend', sans-serif;
-  font-size: 40px;
+  font-size: 2rem;
+  margin: 0;
 `;
 
-const InfoContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+const ContentContainer = styled.div`
+  margin-top: 2rem;
 
-  @media (min-width: 1024px) {
-    flex-direction: row;
-    align-items: flex-start;
+  @media (min-width: 600px) {
+    margin-top: 0;
   }
 `;
 
@@ -60,88 +46,91 @@ const InfoText = styled.p`
   font-family: 'Lexend', sans-serif;
   font-size: 0.8rem;
   color: #9c9c9c;
-  width: 520px;
-  font-style: italic;
-  margin-top: 0.5rem;
+  margin: 0;
 
-  @media (min-width: 1024px) {
-    font-size: 0.81rem;
+  @media (min-width: 600px) {
+    font-size: 0.9rem;
   }
 `;
 
 const NavContainer = styled.div`
+  margin-top: 2rem;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  align-items: center;
+  gap: 1rem;
 
-  @media (min-width: 1024px) {
+  @media (min-width: 600px) {
     flex-direction: row;
-    gap: 5.94rem;
+    align-items: flex-start;
+    gap: 5rem;
+    margin-top: 0;
   }
 `;
 
 const NavList = styled.ul`
   display: flex;
   flex-direction: column;
-  gap: 0.7rem;
+  gap: 1rem;
   list-style: none;
   padding: 0;
+  margin: 0;
 `;
 
 const NavItem = styled.li`
-  cursor: pointer;
+  font-family: 'Lexend', sans-serif;
+`;
+
+const NavLink = styled(Link)`
   color: #a7a7a7;
+  text-decoration: none;
 
   &:hover {
-    color: #action;
+    color: #ffffff;
   }
 `;
 
 function Footer() {
+  const year = new Date().getFullYear();
+
   return (
     <FooterContainer>
+      <LogoContainer>
+        <LogoText>kimitsu</LogoText>
+      </LogoContainer>
       <ContentContainer>
-        <LogoContainer>
-          <LogoText>kimitsu</LogoText>
-        </LogoContainer>
-        <InfoContainer>
-          <div>
-            <p style={{ fontFamily: "'Lexend', sans-serif", fontSize: "0.81rem", color: "#CCCCCC", margin: 0 }}>
-              &copy; {year} kimitsu. | React app made with ❤️
-            </p>
-            <InfoText>
-              This site does not store any files on our server, we only link to
-              the media which is hosted on 3rd party services.
-            </InfoText>
-          </div>
-        </InfoContainer>
+        <InfoText>
+          &copy; {year} kimitsu. | React app made with ❤️
+        </InfoText>
+        <InfoText>
+          This site does not store any files on our server, we only link to
+          the media which is hosted on 3rd party services.
+        </InfoText>
       </ContentContainer>
-      <ContentContainer>
-        <NavContainer>
-          <NavList>
-            <NavItem>
-              <Link to="/popular/1">Popular Anime</Link>
-            </NavItem>
-            <NavItem>
-              <Link to="/genre/Action">Action Anime</Link>
-            </NavItem>
-          </NavList>
-          <NavList>
-            <NavItem>
-              <Link to="/movies/1">Movies</Link>
-            </NavItem>
-            <NavItem>
-              <Link to="/trending/1">Latest Shows</Link>
-            </NavItem>
-            <NavItem>
-              <Link to="/dmca">DMCA</Link>
-            </NavItem>
-            <NavItem>
-              <Link href="https://github.com/gaminglnk/">Github</Link>
-            </NavItem>
-          </NavList>
-        </NavContainer>
-      </ContentContainer>
+      <NavContainer>
+        <NavList>
+          <NavItem>
+            <NavLink to="/popular/1">Popular Anime</NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink to="/genre/Action">Action Anime</NavLink>
+          </NavItem>
+        </NavList>
+        <NavList>
+          <NavItem>
+            <NavLink to="/movies/1">Movies</NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink to="/trending/1">Latest Shows</NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink to="/dmca">DMCA</NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink href="https://github.com/gaminglnk/">Github</NavLink>
+          </NavItem>
+        </NavList>
+      </NavContainer>
     </FooterContainer>
   );
 }
