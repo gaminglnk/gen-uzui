@@ -98,22 +98,11 @@ const NavItem = styled.li`
 `;
 
 function Footer() {
-  const [year] = useState(new Date().getFullYear());
-  const [season] = useState(getCurrentSeason());
-
   return (
     <FooterContainer>
       <ContentContainer>
         <LogoContainer>
           <LogoText>kimitsu</LogoText>
-          {/* Uncomment the following code if you want to include an Image */}
-          {/* <Img
-            src="https://i1210.photobucket.com/albums/cc417/kusanagiblog/NarutoVSSasuke.gif"
-            alt="gambar"
-            title="request nya rapip yulistian"
-            width={210}
-            height={85}
-          /> */}
         </LogoContainer>
         <InfoContainer>
           <div>
@@ -130,11 +119,6 @@ function Footer() {
       <ContentContainer>
         <NavContainer>
           <NavList>
-            <NavItem>
-              <Link to={`/search/anime?season=${season}&seasonYear=${year}`}>
-                This Season
-              </Link>
-            </NavItem>
             <NavItem>
               <Link to="/popular/1">Popular Anime</Link>
             </NavItem>
@@ -160,32 +144,6 @@ function Footer() {
       </ContentContainer>
     </FooterContainer>
   );
-}
-
-function getCurrentSeason() {
-  const now = new Date();
-  const month = now.getMonth() + 1; // getMonth() returns 0-based index
-
-  switch (month) {
-    case 12:
-    case 1:
-    case 2:
-      return "WINTER";
-    case 3:
-    case 4:
-    case 5:
-      return "SPRING";
-    case 6:
-    case 7:
-    case 8:
-      return "SUMMER";
-    case 9:
-    case 10:
-    case 11:
-      return "FALL";
-    default:
-      return "UNKNOWN SEASON";
-  }
 }
 
 export default Footer;
