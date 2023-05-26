@@ -52,7 +52,7 @@ const InfoContainer = styled.div`
 
   @media (min-width: 1024px) {
     flex-direction: row;
-    align-items: end;
+    align-items: flex-start;
   }
 `;
 
@@ -62,6 +62,7 @@ const InfoText = styled.p`
   color: #9c9c9c;
   width: 520px;
   font-style: italic;
+  margin-top: 0.5rem;
 
   @media (min-width: 1024px) {
     font-size: 0.81rem;
@@ -83,6 +84,8 @@ const NavList = styled.ul`
   display: flex;
   flex-direction: column;
   gap: 0.7rem;
+  list-style: none;
+  padding: 0;
 `;
 
 const NavItem = styled.li`
@@ -114,7 +117,7 @@ function Footer() {
         </LogoContainer>
         <InfoContainer>
           <div>
-            <p style={{display:"flex",alignItems:"center",gap:"0.25rem",fontFamily:"Lexend,sans-serif",fontSize:"0.81rem",color:"#CCCCCC"}}>
+            <p style={{ fontFamily: "'Lexend', sans-serif", fontSize: "0.81rem", color: "#CCCCCC", margin: 0 }}>
               &copy; {year} kimitsu. | React app made with ❤️
             </p>
             <InfoText>
@@ -150,7 +153,7 @@ function Footer() {
               <Link to="/dmca">DMCA</Link>
             </NavItem>
             <NavItem>
-              <Link to="https://github.com/gaminglnk/">Github</Link>
+              <Link href="https://github.com/gaminglnk/">Github</Link>
             </NavItem>
           </NavList>
         </NavContainer>
