@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import Nav from "./components/Navigation/Nav";
+import Footer from "./components/Universal/Footer";
 import FavouriteAnime from "./pages/FavouriteAnime";
 import Home from "./pages/Home";
 import MalAnimeDetails from "./pages/MalAnimeDetails";
@@ -44,6 +45,7 @@ function App() {
           },
         }}
       />
+      <Footer />
     </Router>
   );
 }
