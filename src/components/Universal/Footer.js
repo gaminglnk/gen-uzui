@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
@@ -44,12 +45,12 @@ const ContentContainer = styled.div`
 
 const InfoText = styled.p`
   font-family: 'Lexend', sans-serif;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   color: #9c9c9c;
-  margin: 0;
+  margin: 1rem 0;
 
   @media (min-width: 600px) {
-    font-size: 0.9rem;
+    font-size: 1rem;
   }
 `;
 
@@ -58,7 +59,7 @@ const NavContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  gap: 1.5rem;
 
   @media (min-width: 600px) {
     flex-direction: row;
@@ -72,7 +73,7 @@ const NavList = styled.ul`
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  list-style: none;
+  list-style-type: none;
   padding: 0;
   margin: 0;
 `;
@@ -91,7 +92,7 @@ const NavLink = styled(Link)`
 `;
 
 function Footer() {
-  const year = new Date().getFullYear();
+  const [year] = useState(new Date().getFullYear());
 
   return (
     <FooterContainer>
