@@ -60,15 +60,14 @@ function MalAnimeDetails() {
     let data;
       
     try {
-      data = await fetchEpisodes.fetchEpisodesListById(id);
+      const fallbackRes = await axios.get(`${process.env.REACT_APP_BACK_URL}/meta/anilist/episodes/${id}`);
+      data = fallbackRes.data;
     } catch (error) {
       console.log(error);
       toast.error('Error occured, using fallback...', {
         duration: 3000,
       });
-
-      const fallbackRes = await axios.get(`${process.env.REACT_APP_BACK_URL}/meta/anilist/episodes/${id}`);
-      data = fallbackRes.data;
+      data = await fetchEpisodes.fetchEpisodesListById(id);
     }
       
     if (data.length === 0) {
